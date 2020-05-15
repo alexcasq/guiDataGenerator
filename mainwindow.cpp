@@ -11,16 +11,43 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     fileName.clear();
 
+    //------------------------------------------------------------
     ui->comboBox_functions->addItem(defGaussianBlur);
     ui->comboBox_functions->addItem(defBlur);
     ui->comboBox_functions->addItem(defMedianBlur);
     ui->comboBox_functions->addItem(defBilateralFilter);
     ui->comboBox_functions->addItem(defConvolution);
+    ui->comboBox_functions->addItem(defColorConversion);
+    ui->comboBox_functions->addItem(defDataAumentation);
+    ui->comboBox_functions->addItem(defDenoisingColored);
+    //------------------------------------------------------------
 
+    ui->comboBox_colorConv->addItem("Press to select Convertion");
+    ui->comboBox_colorConv->addItem(defBGR2HSV);
+    ui->comboBox_colorConv->addItem(defBGR2GRAY);
+    ui->comboBox_colorConv->addItem(defBGR2Luv);
+    ui->comboBox_colorConv->addItem(defBGR2Lab);
+    ui->comboBox_colorConv->addItem(defBGR2HLS);
+    ui->comboBox_colorConv->addItem(defBGR2XYZ);
+    ui->comboBox_colorConv->addItem(defBGR2YCrCB);
+
+    ui->comboBox_DA->addItem("Press to select data aumentation");
+    ui->comboBox_DA->addItem(defFlipXaxis);
+    ui->comboBox_DA->addItem(defFlipYaxis);
+    ui->comboBox_DA->addItem(defFlipXYaxes);
+
+    // Create model
+    model = new QStringListModel(this);
+    ui->listView_addScript->setEditTriggers(QAbstractItemView::NoEditTriggers);
+
+    ui->label_dataAumentation->setStyleSheet("QLabel { background-color : red; color : white; }");
 
 
     connect(ui->loadValues, &QAction::triggered, this, &MainWindow::toggleStatusbarLoad);
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::toggleStatusbarExit);
+
+
+    connect(ui->actionClose_all_windows, &QAction::triggered, this, &MainWindow::ToolsCloseAllWindows);
 
 }
 
@@ -135,6 +162,18 @@ void MainWindow::toggleStatusbarExit()
 
 
 } // end toggleStatusbarExit
+
+
+/**
+ * @brief MainWindow::ToolsCloseAllWindows
+ */
+void MainWindow::ToolsCloseAllWindows()
+{
+    destroyAllWindows();
+
+} // end ToolsCloseAllWindows
+//------------------------------------------------------------------------------
+
 
 
 //------------------------------------------------------------------------------
@@ -297,10 +336,22 @@ void MainWindow::on_comboBox_functions_currentIndexChanged(const QString &arg1)
     if(arg1 == defConvolution)
     {
         ui->stackedWidget_values->setCurrentIndex(4);
-        //RunBilateralFilter();
     }
 
+    if(arg1 == defColorConversion)
+    {
+        ui->stackedWidget_values->setCurrentIndex(5);
+    }
 
+    if(arg1 == defDataAumentation)
+    {
+        ui->stackedWidget_values->setCurrentIndex(6);
+    }
+
+    if(arg1 == defDenoisingColored)
+    {
+        ui->stackedWidget_values->setCurrentIndex(7);
+    }
 
 } // end on_comboBox_functions_currentIndexChanged
 //------------------------------------------------------------------------------
@@ -674,6 +725,280 @@ void MainWindow::on_pb_saveImageConv_clicked()
 } // end on_pb_saveImageConv_clicked
 
 //------------------------------------------------------------------------------
+
+
+
+//------------------------------------------------------------------------------
+/**
+ * @brief MainWindow::on_comboBox_colorConv_currentIndexChanged
+ * @param arg1
+ */
+void MainWindow::on_comboBox_colorConv_currentIndexChanged(const QString &arg1)
+{
+    if(!imgInput.empty() && imgInput.channels() == 3)
+    {
+        if(arg1 == defBGR2GRAY)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2GRAY");
+            cvtColor(imgInput, imgGray, COLOR_BGR2GRAY);
+            namedWindow("Gray", 0);
+            imshow("Gray", imgGray);
+            waitKey(1);
+        } // convert BGR TO GRAY
+        if(arg1 == defBGR2HSV)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2HSV");
+            cvtColor(imgInput, imgHSV, COLOR_BGR2HSV);
+            namedWindow("HSV", 0);
+            imshow("HSV", imgHSV);
+            waitKey(1);
+        } // convert BGR TO HSV
+        if(arg1 == defBGR2Luv)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2Luv");
+            cvtColor(imgInput, imgLuv, COLOR_BGR2Luv);
+            namedWindow("Luv", 0);
+            imshow("Luv", imgLuv);
+            waitKey(1);
+        } // convert BGR TO LUV
+        if(arg1 == defBGR2Lab)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2Lab");
+            cvtColor(imgInput, imgLab, COLOR_BGR2Lab);
+            namedWindow("Lab", 0);
+            imshow("Lab", imgLab);
+            waitKey(1);
+        } // convert BGR TO LAB
+        if(arg1 == defBGR2HLS)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2HLS");
+            cvtColor(imgInput, imgHLS, COLOR_BGR2HLS);
+            namedWindow("HLS", 0);
+            imshow("HLS", imgHLS);
+            waitKey(1);
+        } // convert BGR TO HLS
+        if(arg1 == defBGR2XYZ)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2XYZ");
+            cvtColor(imgInput, imgXYZ, COLOR_BGR2XYZ);
+            namedWindow("XYZ", 0);
+            imshow("XYZ", imgXYZ);
+            waitKey(1);
+        } // convert BGR TO XYZ
+        if(arg1 == defBGR2YCrCB)
+        {
+            ui->pb_saveImageCC->setText("Save Image BGR2YCrCb");
+            cvtColor(imgInput, imgYCrCB, COLOR_BGR2YCrCb);
+            namedWindow("YCrCB", 0);
+            imshow("YCrCB", imgYCrCB);
+            waitKey(1);
+        } // convert BGR TO XYZ
+
+    } // imgInput not empty and is image with 3 channels
+
+} // end on_comboBox_colorConv_currentIndexChanged
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+/**
+ * @brief MainWindow::on_comboBox_DA_currentIndexChanged
+ * @param arg1
+ */
+void MainWindow::on_comboBox_DA_currentIndexChanged(const QString &arg1)
+{
+    if(!imgInput.empty())
+    {
+        Mat flipImage;
+        string nameWindow;
+        nameWindow ="";
+        if(arg1 == defFlipXaxis)
+        {
+            flip(imgInput, flipImage, 0);
+            nameWindow = "Flip around X";
+        } // flip x
+
+        if(arg1 == defFlipYaxis)
+        {
+            flip(imgInput, flipImage, 1);
+            nameWindow = "Flip around Y";
+        } // flip x
+
+        if(arg1 == defFlipXYaxes)
+        {
+            flip(imgInput, flipImage, -1);
+            nameWindow = "Flip around XY";
+
+        } // flip x
+
+        if(!flipImage.empty())
+        {
+            namedWindow(nameWindow, 0);
+            imshow(nameWindow,flipImage);
+            waitKey(1);
+        } // flipImage not empty
+
+    } // imgInput not empty
+
+
+
+} // end on_comboBox_DA_currentIndexChanged
+
+/**
+ * @brief MainWindow::on_pb_addMassive_clicked
+ */
+void MainWindow::on_pb_addMassive_clicked()
+{
+    QString FunctionName;
+    FunctionName = ui->comboBox_DA->currentText();
+
+    if(FunctionName != "Press to select data aumentation")
+    {
+        if(!functionList.contains(FunctionName))
+        {
+            functionList.append(FunctionName);
+        }
+
+        model->setStringList(functionList);
+        ui->listView_addScript->setModel(model);
+
+    } // diferent to slect value
+
+
+} // end on_pb_addMassive_clicked
+
+
+/**
+ * @brief MainWindow::on_listView_addScript_doubleClicked
+ * @param index
+ */
+void MainWindow::on_listView_addScript_doubleClicked(const QModelIndex &index)
+{
+    cout<<index.row()<<endl;
+
+    QString itemText = index.data(Qt::DisplayRole).toString();
+
+    cout<<itemText.toStdString()<<endl;
+
+    functionList.removeAt(index.row());
+
+    model->setStringList(functionList);
+
+    ui->listView_addScript->setModel(model);
+
+} // end on_listView_addScript_doubleClicked
+
+//------------------------------------------------------------------------------
+
+
+
+//------------------------------------------------------------------------------
+
+/**
+ * @brief MainWindow::denoisingColored
+ */
+void MainWindow::denoisingColored()
+{
+    if(!imgInput.empty())
+    {
+        ui->doubleSpinBox_PhotoR_DC->setDisabled(true);
+        ui->doubleSpinBox_hLuminanceDC->setDisabled(true);
+        ui->spinBox_SearchW_DC->setDisabled(true);
+        ui->spinBox_blocSize_DC->setDisabled(true);
+
+        float h_luminance    = 0.0;
+        float h_color       = 0.0;
+        int search_window   = 0;
+        int block_size      = 0;
+
+        h_luminance     = (float)ui->doubleSpinBox_hLuminanceDC->value();
+        h_color         = (float)ui->doubleSpinBox_PhotoR_DC->value();
+        search_window   = ui->spinBox_SearchW_DC->value();
+        block_size      = ui->spinBox_blocSize_DC->value();
+
+//        src Input 8-bit 3-channel image.
+//        dst Output image with the same size and type as src .
+//        templateWindowSize Size in pixels of the template patch that is used to compute weights.
+//         Should be odd. Recommended value 7 pixels
+//        searchWindowSize Size in pixels of the window that is used to compute weighted average for
+//         given pixel. Should be odd. Affect performance linearly: greater searchWindowsSize - greater
+//         denoising time. Recommended value 21 pixels
+//        h Parameter regulating filter strength for luminance component. Bigger h value perfectly
+//         removes noise but also removes image details, smaller h value preserves details but also preserves
+//         some noise
+//        hColor The same as h but for color components. For most images value equals 10
+//         will be enough to remove colored noise and do not distort colors
+
+        fastNlMeansDenoisingColored(imgInput, imgDenoisedColored,
+                                    h_luminance, h_color,
+                                    block_size, search_window);
+
+        namedWindow("DenoisingColored", 0);
+        imshow("DenoisingColored", imgDenoisedColored);
+        waitKey(1);
+
+        ui->doubleSpinBox_PhotoR_DC->setDisabled(false);
+        ui->doubleSpinBox_hLuminanceDC->setDisabled(false);
+        ui->spinBox_SearchW_DC->setDisabled(false);
+        ui->spinBox_blocSize_DC->setDisabled(false);
+
+    } // imgINput not empty
+
+} // end denoisingColored
+
+
+/**
+ * @brief MainWindow::on_doubleSpinBox_hLuminanceDC_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_doubleSpinBox_hLuminanceDC_valueChanged(double arg1)
+{
+    denoisingColored();
+
+} // end on_doubleSpinBox_hLuminanceDC_valueChanged
+
+/**
+ * @brief MainWindow::on_doubleSpinBox_PhotoR_DC_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_doubleSpinBox_PhotoR_DC_valueChanged(double arg1)
+{
+    denoisingColored();
+} // end on_doubleSpinBox_PhotoR_DC_valueChanged
+
+/**
+ * @brief MainWindow::on_spinBox_SearchW_DC_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_SearchW_DC_valueChanged(int arg1)
+{
+    denoisingColored();
+} // end on_spinBox_SearchW_DC_valueChanged
+
+/**
+ * @brief MainWindow::on_spinBox_blocSize_DC_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_blocSize_DC_valueChanged(int arg1)
+{
+    denoisingColored();
+} // end on_spinBox_blocSize_DC_valueChanged
+
+//------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

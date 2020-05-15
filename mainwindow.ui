@@ -6,14 +6,14 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>278</width>
-    <height>601</height>
+    <width>363</width>
+    <height>665</height>
    </rect>
   </property>
   <property name="font">
    <font>
-    <family>FreeMono</family>
-    <pointsize>12</pointsize>
+    <family>DejaVu Serif</family>
+    <pointsize>10</pointsize>
     <weight>75</weight>
     <bold>true</bold>
    </font>
@@ -25,8 +25,8 @@
    <widget class="QPushButton" name="pb_loadImage">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>10</y>
+      <x>10</x>
+      <y>20</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -46,17 +46,25 @@
    <widget class="QStackedWidget" name="stackedWidget_values">
     <property name="geometry">
      <rect>
-      <x>10</x>
-      <y>210</y>
-      <width>261</width>
-      <height>341</height>
+      <x>20</x>
+      <y>150</y>
+      <width>321</width>
+      <height>471</height>
      </rect>
+    </property>
+    <property name="font">
+     <font>
+      <family>DejaVu Serif</family>
+      <pointsize>10</pointsize>
+      <weight>75</weight>
+      <bold>true</bold>
+     </font>
     </property>
     <property name="frameShape">
      <enum>QFrame::Box</enum>
     </property>
     <property name="currentIndex">
-     <number>4</number>
+     <number>7</number>
     </property>
     <widget class="QWidget" name="Gaussian">
      <widget class="QSpinBox" name="spinBox_k1">
@@ -857,17 +865,484 @@
       </property>
      </widget>
     </widget>
-    <widget class="QWidget" name="page_2"/>
-    <widget class="QWidget" name="page_3"/>
-    <widget class="QWidget" name="page_4"/>
+    <widget class="QWidget" name="page_2">
+     <widget class="QLabel" name="label_colorConv">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>171</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="text">
+       <string>Color Conversion</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_colorConv">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>60</y>
+        <width>221</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveImageCC">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>130</y>
+        <width>221</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_3">
+     <widget class="QLabel" name="label_dataAumentation">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>171</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="palette">
+       <palette>
+        <active>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>238</red>
+            <green>238</green>
+            <blue>236</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </active>
+        <inactive>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>255</red>
+            <green>255</green>
+            <blue>255</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>238</red>
+            <green>238</green>
+            <blue>236</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </inactive>
+        <disabled>
+         <colorrole role="Base">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>238</red>
+            <green>238</green>
+            <blue>236</blue>
+           </color>
+          </brush>
+         </colorrole>
+         <colorrole role="Window">
+          <brush brushstyle="SolidPattern">
+           <color alpha="255">
+            <red>238</red>
+            <green>238</green>
+            <blue>236</blue>
+           </color>
+          </brush>
+         </colorrole>
+        </disabled>
+       </palette>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="text">
+       <string>Data Aumentation</string>
+      </property>
+     </widget>
+     <widget class="QComboBox" name="comboBox_DA">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>40</y>
+        <width>241</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+     </widget>
+     <widget class="QListView" name="listView_addScript">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>120</y>
+        <width>291</width>
+        <height>221</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_addMassive">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>141</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Add in the list</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_addFromFile">
+      <property name="geometry">
+       <rect>
+        <x>150</x>
+        <y>90</y>
+        <width>151</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Add from File</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_MassiveExe">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>340</y>
+        <width>151</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Massive execute</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_oneFileExec">
+      <property name="geometry">
+       <rect>
+        <x>160</x>
+        <y>340</y>
+        <width>141</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>One file execute</string>
+      </property>
+     </widget>
+     <widget class="QProgressBar" name="progressBar_DA">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>400</y>
+        <width>291</width>
+        <height>23</height>
+       </rect>
+      </property>
+      <property name="value">
+       <number>1</number>
+      </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_4">
+     <widget class="QLabel" name="label_DenoisingColored">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>171</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="text">
+       <string>Denoising Colored</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_hLuminanceDC">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>100</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="minimum">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>255.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>3.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_hl_DC">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>80</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>h</string>
+      </property>
+     </widget>
+     <widget class="QDoubleSpinBox" name="doubleSpinBox_PhotoR_DC">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>100</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="minimum">
+       <double>1.000000000000000</double>
+      </property>
+      <property name="maximum">
+       <double>255.000000000000000</double>
+      </property>
+      <property name="value">
+       <double>3.000000000000000</double>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_PR_DC">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>80</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>h Color</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBox_SearchW_DC">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>170</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>255</number>
+      </property>
+      <property name="value">
+       <number>7</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_SW_DC">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>131</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>Search window</string>
+      </property>
+     </widget>
+     <widget class="QSpinBox" name="spinBox_blocSize_DC">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>170</y>
+        <width>111</width>
+        <height>26</height>
+       </rect>
+      </property>
+      <property name="minimum">
+       <number>1</number>
+      </property>
+      <property name="maximum">
+       <number>255</number>
+      </property>
+      <property name="value">
+       <number>21</number>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_BS_DC">
+      <property name="geometry">
+       <rect>
+        <x>130</x>
+        <y>150</y>
+        <width>121</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>DejaVu Serif</family>
+        <pointsize>10</pointsize>
+        <weight>75</weight>
+        <italic>false</italic>
+        <bold>true</bold>
+       </font>
+      </property>
+      <property name="text">
+       <string>TemplateW Size</string>
+      </property>
+     </widget>
+    </widget>
     <widget class="QWidget" name="page_5"/>
     <widget class="QWidget" name="page_6"/>
    </widget>
    <widget class="QPushButton" name="pb_viewOriginalImage">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>50</y>
+      <x>180</x>
+      <y>20</y>
       <width>171</width>
       <height>41</height>
      </rect>
@@ -879,9 +1354,9 @@
    <widget class="QComboBox" name="comboBox_functions">
     <property name="geometry">
      <rect>
-      <x>50</x>
-      <y>140</y>
-      <width>171</width>
+      <x>20</x>
+      <y>110</y>
+      <width>191</width>
       <height>31</height>
      </rect>
     </property>
@@ -892,8 +1367,8 @@
    <widget class="QLabel" name="label_selectFunction">
     <property name="geometry">
      <rect>
-      <x>60</x>
-      <y>120</y>
+      <x>40</x>
+      <y>90</y>
       <width>151</width>
       <height>17</height>
      </rect>
@@ -909,8 +1384,8 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>278</width>
-     <height>21</height>
+     <width>363</width>
+     <height>20</height>
     </rect>
    </property>
    <widget class="QMenu" name="menuFile">
@@ -919,25 +1394,67 @@
     </property>
     <addaction name="separator"/>
     <addaction name="separator"/>
+    <addaction name="separator"/>
     <addaction name="loadValues"/>
     <addaction name="saveAllConfigs"/>
     <addaction name="actionExit"/>
    </widget>
+   <widget class="QMenu" name="menuTools">
+    <property name="title">
+     <string>Tools</string>
+    </property>
+    <addaction name="actionClose_all_windows"/>
+   </widget>
    <addaction name="menuFile"/>
+   <addaction name="menuTools"/>
   </widget>
   <action name="loadValues">
    <property name="text">
     <string>Load File Values</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>DejaVu Serif</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
   </action>
   <action name="saveAllConfigs">
    <property name="text">
     <string>Save all Configs</string>
    </property>
+   <property name="font">
+    <font>
+     <family>DejaVu Serif</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
   </action>
   <action name="actionExit">
    <property name="text">
     <string>Exit</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>DejaVu Serif</family>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
+   </property>
+  </action>
+  <action name="actionClose_all_windows">
+   <property name="text">
+    <string>Close all windows</string>
+   </property>
+   <property name="font">
+    <font>
+     <family>DejaVu Serif</family>
+     <pointsize>11</pointsize>
+     <weight>75</weight>
+     <bold>true</bold>
+    </font>
    </property>
   </action>
  </widget>
