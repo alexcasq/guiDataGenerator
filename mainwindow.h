@@ -7,6 +7,7 @@
 #include <QInputDialog>
 #include <QStringListModel>
 #include <QAbstractItemView>
+#include <QMessageBox>
 
 
 #include <stdlib.h>
@@ -16,6 +17,9 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+
+#include <massivevision.h>
+
 
 using namespace cv;
 using namespace std;
@@ -42,7 +46,7 @@ public:
      * @brief saveImage
      * @param imgSave
      */
-    void saveImage(Mat imgSave);
+    void saveImage(Mat imgSave, QString iden);
 
 
     QString fileName;
@@ -124,6 +128,7 @@ public:
     int p20, p21, p22, p23, p24;
     int p30, p31, p32, p33, p34;
     int p40, p41, p42, p43, p44;
+    Mat kernel;
     void RunFilter2D();
     //
     // VAR DENOISING COLORED
@@ -133,6 +138,8 @@ public:
 
     QStringListModel *model;
     QStringList functionList;
+    QString ymlConfig;
+
 
 
 
@@ -240,6 +247,36 @@ private slots:
     void on_pb_addMassive_clicked();
 
     void on_listView_addScript_doubleClicked(const QModelIndex &index);
+
+
+
+    void on_pb_saveImageGB_clicked();
+
+    void on_pb_saveImageBLUR_clicked();
+
+    void on_pb_saveImageMEDIANBLUR_clicked();
+
+    void on_pb_saveImageBILF_clicked();
+
+    void on_pb_saveImageCC_clicked();
+
+    void on_pb_saveImageDENCOL_clicked();
+
+    void on_pb_saveConfigGB_clicked();
+
+    void on_pb_saveConfigBLUR_clicked();
+
+    void on_pb_saveConfigMEDIANBLUR_clicked();
+
+    void on_pb_saveConfigBILF_clicked();
+
+    void on_pb_saveConfigConv_clicked();
+
+    void on_pb_saveConfigDENCOL_clicked();
+
+    void on_pb_addFromFile_clicked();
+
+    void on_pb_MassiveExe_clicked();
 
 private:
     Ui::MainWindow *ui;

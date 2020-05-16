@@ -42,11 +42,8 @@ MainWindow::MainWindow(QWidget *parent)
 
     ui->label_dataAumentation->setStyleSheet("QLabel { background-color : red; color : white; }");
 
-
     connect(ui->loadValues, &QAction::triggered, this, &MainWindow::toggleStatusbarLoad);
     connect(ui->actionExit, &QAction::triggered, this, &MainWindow::toggleStatusbarExit);
-
-
     connect(ui->actionClose_all_windows, &QAction::triggered, this, &MainWindow::ToolsCloseAllWindows);
 
 }
@@ -82,14 +79,26 @@ void MainWindow::on_pb_loadImage_clicked()
  * @brief MainWindow::saveImage
  * @param imgSave
  */
-void MainWindow::saveImage(Mat imgSave)
+void MainWindow::saveImage(Mat imgSave, QString iden)
 {
     if(!imgSave.empty())
     {
-
         QString filenameS;
-        filenameS = QFileDialog::getSaveFileName(this, "Save file default jpg", "",
-                                                "Images (*.png *.bmp *.jpg)");
+
+        if(iden == "")
+        {
+            filenameS = QFileDialog::getSaveFileName(this, "Save file default jpg", "",
+                                                    "Images (*.png *.bmp *.jpg)");
+        }
+
+        if(iden != "")
+        {
+            QString suges;
+            suges = iden + "  Images (*.png *.bmp *.jpg)";
+            filenameS = QFileDialog::getSaveFileName(this, "Save file default jpg", iden,
+                                                    suges);
+        }
+
 
         //cout<<"Filename save : " << filenameS.toStdString() << endl;
 
@@ -146,7 +155,9 @@ void MainWindow::on_pb_viewOriginalImage_clicked()
  */
 void MainWindow::toggleStatusbarLoad()
 {
+    //pending development
 
+    // load in dependence to identiicator
 
 
 }
@@ -159,8 +170,6 @@ void MainWindow::toggleStatusbarExit()
 {
     destroyAllWindows();
     close();
-
-
 } // end toggleStatusbarExit
 
 
@@ -174,130 +183,6 @@ void MainWindow::ToolsCloseAllWindows()
 } // end ToolsCloseAllWindows
 //------------------------------------------------------------------------------
 
-
-
-//------------------------------------------------------------------------------
-/**
- * @brief MainWindow::RunGB
- */
-void MainWindow::RunGB()
-{
-    int s1 = ui->spinBox_k1->value();
-    int s2 = ui->spinBox_k2->value();
-
-    kernelG = Size(s1, s2);
-
-    sigmaX = ui->spinBox_sigx->value();
-    sigmaY = ui->spinBox_sigy->value();
-
-    if(!imgInput.empty()){
-
-        GaussianBlur(imgInput, imgGB, kernelG, sigmaX, sigmaY, BORDER_DEFAULT);
-
-        namedWindow("GaussianBlur",0);
-        imshow("GaussianBlur", imgGB);
-        waitKey(1);
-
-    } // imgInput no vacia
-
-
-} // end RunGB
-
-
-/**
- * @brief MainWindow::on_spinBox_valueChanged
- * @param arg1
- */
-void MainWindow::on_spinBox_k1_valueChanged(int arg1)
-{
-    if ( arg1 % 2 == 0)
-    {
-        ui->spinBox_k1->setValue(arg1+1);
-    }
-    RunGB();
-}// end on_spinBox_valueChanged
-
-
-/**
- * @brief MainWindow::on_spinBox_2_valueChanged
- * @param arg1
- */
-void MainWindow::on_spinBox_k2_valueChanged(int arg1)
-{
-    if ( arg1 % 2 == 0)
-    {
-        ui->spinBox_k2->setValue(arg1+1);
-    }
-    RunGB();
-} // end on_spinBox_2_valueChanged
-
-
-/**
- * @brief MainWindow::on_spinBox_3_valueChanged
- * @param arg1
- */
-void MainWindow::on_spinBox_sigx_valueChanged(int arg1)
-{
-    RunGB();
-} // end on_spinBox_3_valueChanged
-
-
-/**
- * @brief MainWindow::on_spinBox_4_valueChanged
- * @param arg1
- */
-void MainWindow::on_spinBox_sigy_valueChanged(int arg1)
-{
-    RunGB();
-
-} // end on_spinBox_4_valueChanged
-//------------------------------------------------------------------------------
-
-
-//------------------------------------------------------------------------------
-/**
- * @brief MainWindow::RunBlur
- */
-void MainWindow::RunBlur()
-{
-    int s1 = ui->spinBox_Bk1->value();
-    int s2 = ui->spinBox_Bk2->value();
-
-    kernelB = Size(s1, s2);
-
-    if(!imgInput.empty()){
-        blur(imgInput, imgBlur, kernelB, Point(-1,-1) );
-
-        namedWindow("Blur",0);
-        imshow("Blur", imgBlur);
-        waitKey(1);
-    }
-
-} // end RunBlur
-
-
-/**
- * @brief MainWindow::on_spinBox_Bk1_valueChanged
- * @param arg1
- */
-void MainWindow::on_spinBox_Bk1_valueChanged(int arg1)
-{
-    RunBlur();
-
-
-} // end on_spinBox_Bk1_valueChanged
-
-
-/**
- * @brief MainWindow::on_spinBox_Bk2_valueChanged
- * @param arg1
- */
-void MainWindow::on_spinBox_Bk2_valueChanged(int arg1)
-{
-    RunBlur();
-
-} // on_spinBox_Bk2_valueChanged
-//------------------------------------------------------------------------------
 
 
 
@@ -358,7 +243,240 @@ void MainWindow::on_comboBox_functions_currentIndexChanged(const QString &arg1)
 
 
 
+//------------------------------------------------------------------------------
+// GAUSSINA BLUR FUNCTION
+//------------------------------------------------------------------------------
+/**
+ * @brief MainWindow::RunGB
+ */
+void MainWindow::RunGB()
+{
+    int s1 = ui->spinBox_k1->value();
+    int s2 = ui->spinBox_k2->value();
 
+    kernelG = Size(s1, s2);
+
+    sigmaX = ui->spinBox_sigx->value();
+    sigmaY = ui->spinBox_sigy->value();
+
+    if(!imgInput.empty()){
+
+        GaussianBlur(imgInput, imgGB, kernelG, sigmaX, sigmaY, BORDER_DEFAULT);
+
+        namedWindow("GaussianBlur",0);
+        imshow("GaussianBlur", imgGB);
+        waitKey(1);
+
+    } // imgInput no vacia
+
+
+} // end RunGB
+
+/**
+ * @brief MainWindow::on_spinBox_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_k1_valueChanged(int arg1)
+{
+    if ( arg1 % 2 == 0)
+    {
+        ui->spinBox_k1->setValue(arg1+1);
+    }
+    RunGB();
+}// end on_spinBox_valueChanged
+
+
+/**
+ * @brief MainWindow::on_spinBox_2_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_k2_valueChanged(int arg1)
+{
+    if ( arg1 % 2 == 0)
+    {
+        ui->spinBox_k2->setValue(arg1+1);
+    }
+    RunGB();
+} // end on_spinBox_2_valueChanged
+
+
+/**
+ * @brief MainWindow::on_spinBox_3_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_sigx_valueChanged(int arg1)
+{
+    RunGB();
+} // end on_spinBox_3_valueChanged
+
+
+/**
+ * @brief MainWindow::on_spinBox_4_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_sigy_valueChanged(int arg1)
+{
+    RunGB();
+
+} // end on_spinBox_4_valueChanged
+
+
+/**
+ * @brief MainWindow::on_pb_saveImageGB_clicked
+ */
+void MainWindow::on_pb_saveImageGB_clicked()
+{
+    if(!imgGB.empty())
+    {
+        saveImage(imgGB, "GaussianBlur");
+    } // imgGB no empty
+
+} // end on_pb_saveImageGB_clicked
+
+/**
+ * @brief MainWindow::on_pb_saveConfigGB_clicked
+ */
+void MainWindow::on_pb_saveConfigGB_clicked()
+{
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "GaussianBlurValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    //cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //--
+    int s1 = ui->spinBox_k1->value();
+    int s2 = ui->spinBox_k2->value();
+    kernelG = Size(s1, s2);
+    sigmaX = ui->spinBox_sigx->value();
+    sigmaY = ui->spinBox_sigy->value();
+    //--
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "GaussianBlur";
+    fsave << "kernelG" << kernelG;
+    fsave << "sigmaX" << sigmaX;
+    fsave << "sigmaY" << sigmaY;
+    fsave.release();
+
+
+} // end on_pb_saveConfigGB_clicked
+
+
+//------------------------------------------------------------------------------
+
+
+//------------------------------------------------------------------------------
+// BLUR FUNCTION
+//------------------------------------------------------------------------------
+
+/**
+ * @brief MainWindow::RunBlur
+ */
+void MainWindow::RunBlur()
+{
+    int s1 = ui->spinBox_Bk1->value();
+    int s2 = ui->spinBox_Bk2->value();
+
+    kernelB = Size(s1, s2);
+
+    if(!imgInput.empty()){
+        blur(imgInput, imgBlur, kernelB, Point(-1,-1) );
+
+        namedWindow("Blur",0);
+        imshow("Blur", imgBlur);
+        waitKey(1);
+    }
+
+} // end RunBlur
+
+
+/**
+ * @brief MainWindow::on_spinBox_Bk1_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_Bk1_valueChanged(int arg1)
+{
+    RunBlur();
+} // end on_spinBox_Bk1_valueChanged
+
+
+/**
+ * @brief MainWindow::on_spinBox_Bk2_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_Bk2_valueChanged(int arg1)
+{
+    RunBlur();
+
+} // on_spinBox_Bk2_valueChanged
+
+/**
+ * @brief MainWindow::on_pb_saveImageBLUR_clicked
+ */
+void MainWindow::on_pb_saveImageBLUR_clicked()
+{
+    if(!imgBlur.empty())
+    {
+        saveImage(imgBlur, "Blur");
+    } // imgBlur no empty
+
+} // endl on_pb_saveImageBLUR_clicked
+
+/**
+ * @brief MainWindow::on_pb_saveConfigBLUR_clicked
+ */
+void MainWindow::on_pb_saveConfigBLUR_clicked()
+{
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "BlurValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    //cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //--
+    int s1 = ui->spinBox_Bk1->value();
+    int s2 = ui->spinBox_Bk2->value();
+    kernelB = Size(s1, s2);
+    //--
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "blur";
+    fsave << "kernelB" << kernelB;
+    fsave.release();
+} // end on_pb_saveConfigBLUR_clicked
+
+//------------------------------------------------------------------------------
+
+
+
+
+//------------------------------------------------------------------------------
+// MEDIAN BLUR FUNCTION
 //------------------------------------------------------------------------------
 /**
  * @brief MainWindow::RunMedianBlur
@@ -377,7 +495,6 @@ void MainWindow::RunMedianBlur()
 
 } // end RunMedianBlur
 
-
 /**
  * @brief MainWindow::on_spinBox_ksizeMB_valueChanged
  * @param arg1
@@ -392,11 +509,63 @@ void MainWindow::on_spinBox_ksizeMB_valueChanged(int arg1)
     RunMedianBlur();
 
 } // end on_spinBox_ksizeMB_valueChanged
+
+/**
+ * @brief MainWindow::on_pb_saveImageMEDIANBLUR_clicked
+ */
+void MainWindow::on_pb_saveImageMEDIANBLUR_clicked()
+{
+
+    if(!imgMB.empty())
+    {
+        saveImage(imgMB, "MedianBlur");
+    } // imagen median blur not empty
+
+} // end on_pb_saveImageMEDIANBLUR_clicked
+
+/**
+ * @brief MainWindow::on_pb_saveConfigMEDIANBLUR_clicked
+ */
+void MainWindow::on_pb_saveConfigMEDIANBLUR_clicked()
+{
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "MedianBlurValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    //cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //--
+    ksize = ui->spinBox_ksizeMB->value();
+    //--
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "medianBlur";
+    fsave << "ksize" << ksize;
+    fsave.release();
+
+} // end on_pb_saveConfigMEDIANBLUR_clicked
+
 //------------------------------------------------------------------------------
 
 
 
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// BILATERAL FILTER FUNCTION
+//------------------------------------------------------------------------------
+
 /**
  * @brief MainWindow::RunBilateralFilter
  */
@@ -455,9 +624,61 @@ void MainWindow::on_doubleSpinBox_BFsigmaSpace_valueChanged(double arg1)
     ui->doubleSpinBox_BFsigmaSpace->setDisabled(false);
 
 } // end on_doubleSpinBox_BFsigmaSpace_valueChanged
+
+/**
+ * @brief MainWindow::on_pb_saveImageBILF_clicked
+ */
+void MainWindow::on_pb_saveImageBILF_clicked()
+{
+    if(!imgBilFil.empty())
+    saveImage(imgBilFil, "BilateralFilter");
+} // end on_pb_saveImageBILF_clicked
+
+
+/**
+ * @brief MainWindow::on_pb_saveConfigBILF_clicked
+ */
+void MainWindow::on_pb_saveConfigBILF_clicked()
+{
+
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "BilateralFilterValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    //cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //--
+    dBF = ui->spinBox_BFd->value();
+    sigmaColorBF = ui->doubleSpinBox_BFsigmaColor->value();
+    sigmaSpaceBF = ui->doubleSpinBox_BFsigmaSpace->value();
+    //--
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "bilateralFilter";
+    fsave << "dBF" << dBF;
+    fsave << "sigmaColorBF" << sigmaColorBF;
+    fsave << "sigmaSpaceBF" << sigmaSpaceBF;
+    fsave.release();
+
+} //end on_pb_saveConfigBILF_clicked
 //------------------------------------------------------------------------------
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// FILTER2D CONVOLUTIONS FUNCTION
 //------------------------------------------------------------------------------
 
 /**
@@ -497,7 +718,7 @@ void MainWindow::RunFilter2D()
         p43 = ui->spinBox_k43->value();
         p44 = ui->spinBox_k44->value();
 
-        Mat kernel = (Mat_<char>(5,5) << p00, p01,  p02,  p03,  p04,
+        kernel = (Mat_<char>(5,5) << p00, p01,  p02,  p03,  p04,
                                          p10, p11,  p12,  p13,  p14,
                                          p20, p21,  p22,  p23,  p24,
                                          p30, p31,  p32,  p33,  p34,
@@ -718,16 +939,85 @@ void MainWindow::on_pb_saveImageConv_clicked()
 {
    if(!imgConv.empty())
    {
-        saveImage(imgConv);
+        saveImage(imgConv, "Convolution");
 
    } // imgConv no vacia
 
 } // end on_pb_saveImageConv_clicked
 
+/**
+ * @brief MainWindow::on_pb_saveConfigConv_clicked
+ */
+void MainWindow::on_pb_saveConfigConv_clicked()
+{
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "ConvolutionValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    //cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //--
+    p00 = ui->spinBox_k00->value();
+    p01 = ui->spinBox_k01->value();
+    p02 = ui->spinBox_k02->value();
+    p03 = ui->spinBox_k03->value();
+    p04 = ui->spinBox_k04->value();
+
+    p10 = ui->spinBox_k10->value();
+    p11 = ui->spinBox_k11->value();
+    p12 = ui->spinBox_k12->value();
+    p13 = ui->spinBox_k13->value();
+    p14 = ui->spinBox_k14->value();
+
+    p20 = ui->spinBox_k20->value();
+    p21 = ui->spinBox_k21->value();
+    p22 = ui->spinBox_k22->value();
+    p23 = ui->spinBox_k23->value();
+    p24 = ui->spinBox_k24->value();
+
+    p30 = ui->spinBox_k30->value();
+    p31 = ui->spinBox_k31->value();
+    p32 = ui->spinBox_k32->value();
+    p33 = ui->spinBox_k33->value();
+    p34 = ui->spinBox_k34->value();
+
+    p40 = ui->spinBox_k40->value();
+    p41 = ui->spinBox_k41->value();
+    p42 = ui->spinBox_k42->value();
+    p43 = ui->spinBox_k43->value();
+    p44 = ui->spinBox_k44->value();
+
+    kernel = (Mat_<char>(5,5) << p00, p01,  p02,  p03,  p04,
+                                     p10, p11,  p12,  p13,  p14,
+                                     p20, p21,  p22,  p23,  p24,
+                                     p30, p31,  p32,  p33,  p34,
+                                     p40, p41,  p42,  p43,  p44);
+    //--
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "convolution";
+    fsave << "kernel" << kernel;
+    fsave.release();
+} // end on_pb_saveConfigConv_clicked
 //------------------------------------------------------------------------------
 
 
 
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// COLOR CONVERTIONS FUNCTION
 //------------------------------------------------------------------------------
 /**
  * @brief MainWindow::on_comboBox_colorConv_currentIndexChanged
@@ -797,10 +1087,59 @@ void MainWindow::on_comboBox_colorConv_currentIndexChanged(const QString &arg1)
     } // imgInput not empty and is image with 3 channels
 
 } // end on_comboBox_colorConv_currentIndexChanged
+
+
+/**
+ * @brief MainWindow::on_pb_saveImageCC_clicked
+ */
+void MainWindow::on_pb_saveImageCC_clicked()
+{
+    if(!imgXYZ.empty())
+    {
+        saveImage(imgXYZ, "XYC");
+        imgXYZ.release();
+    }
+    if(!imgGray.empty())
+    {
+        saveImage(imgGray, "Gray");
+        imgGray.release();
+    }
+    if(!imgHSV.empty())
+    {
+        saveImage(imgHSV, "HSV");
+        imgHSV.release();
+    }
+    if(!imgLuv.empty())
+    {
+        saveImage(imgLuv, "Luv");
+        imgLuv.release();
+    }
+    if(!imgLab.empty())
+    {
+        saveImage(imgLab, "Lab");
+        imgLab.release();
+    }
+    if(!imgHLS.empty())
+    {
+        saveImage(imgHLS, "HLS");
+        imgHLS.release();
+    }
+    if(!imgYCrCB.empty())
+    {
+        saveImage(imgYCrCB, "YCrCB");
+        imgYCrCB.release();
+    }
+
+} // end on_pb_saveImageCC_clicked
+
 //------------------------------------------------------------------------------
 
 
 //------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+// DATA AUMENTATION  FUNCTION
+//------------------------------------------------------------------------------
+
 /**
  * @brief MainWindow::on_comboBox_DA_currentIndexChanged
  * @param arg1
@@ -854,9 +1193,11 @@ void MainWindow::on_pb_addMassive_clicked()
 
     if(FunctionName != "Press to select data aumentation")
     {
-        if(!functionList.contains(FunctionName))
+        if(!functionList.contains(FunctionName) )
         {
+
             functionList.append(FunctionName);
+
         }
 
         model->setStringList(functionList);
@@ -874,11 +1215,11 @@ void MainWindow::on_pb_addMassive_clicked()
  */
 void MainWindow::on_listView_addScript_doubleClicked(const QModelIndex &index)
 {
-    cout<<index.row()<<endl;
+    //cout<<index.row()<<endl;
 
     QString itemText = index.data(Qt::DisplayRole).toString();
 
-    cout<<itemText.toStdString()<<endl;
+    //cout<<itemText.toStdString()<<endl;
 
     functionList.removeAt(index.row());
 
@@ -888,12 +1229,83 @@ void MainWindow::on_listView_addScript_doubleClicked(const QModelIndex &index)
 
 } // end on_listView_addScript_doubleClicked
 
+
+/**
+ * @brief MainWindow::on_pb_addFromFile_clicked
+ */
+void MainWindow::on_pb_addFromFile_clicked()
+{
+
+    ymlConfig = QFileDialog::getOpenFileName(this,
+        tr("Open config yml "), ".", tr("yml Files (*.yml)"));
+
+    FileStorage fileConfig(ymlConfig.toStdString(), FileStorage::READ);
+    string indetificator = fileConfig["identificator"];
+    if(indetificator.empty())
+    {
+        int ret = QMessageBox::critical(this, tr("My Application"),
+                                       tr("erro in config file yml .\n"
+                                          "The fields in yml file not are corrects."),
+                                       QMessageBox::Ok);
+
+    } // indetificator is incorrect
+
+    fileConfig.release();
+
+    functionList.append(ymlConfig);
+
+    on_pb_addMassive_clicked();
+
+
+} // endl
+
+
+/**
+ * @brief MainWindow::on_pb_MassiveExe_clicked
+ */
+void MainWindow::on_pb_MassiveExe_clicked()
+{
+    int numerFunc;
+    numerFunc = functionList.size();
+    cout<<"numerFunc:: "<< numerFunc << endl;
+
+    QString dirImages = QFileDialog::getExistingDirectory(this, tr("Open Directory with images"),
+                                                ".",
+                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+
+
+    QString outProcess = QFileDialog::getExistingDirectory(this, tr("Select Out Directory "),
+                                                ".",
+                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+
+
+
+    cout<<"dirImages:  " << dirImages.toStdString() << endl;
+    cout<<"OUTdIR   :  " << outProcess.toStdString() << endl;
+
+
+    //--------------------------------------------------
+    // class massiveVission process
+    //--------------------------------------------------
+    massiveVision msv(outProcess, functionList);
+    msv.executeMassive(dirImages);
+    //--------------------------------------------------
+
+    // para unitario
+    //              msv.unitarioExec(img)
+
+
+} // end on_pb_MassiveExe_clicked
 //------------------------------------------------------------------------------
 
 
 
 //------------------------------------------------------------------------------
-
+//------------------------------------------------------------------------------
+// DENOISING COLORED FUNCTION
+//------------------------------------------------------------------------------
 /**
  * @brief MainWindow::denoisingColored
  */
@@ -984,7 +1396,78 @@ void MainWindow::on_spinBox_blocSize_DC_valueChanged(int arg1)
     denoisingColored();
 } // end on_spinBox_blocSize_DC_valueChanged
 
+
+
+void MainWindow::on_pb_saveImageDENCOL_clicked()
+{
+    if(!imgDenoisedColored.empty())
+    {
+        saveImage(imgDenoisedColored, "DenoisingColored");
+
+    } // imgDenoisedColored not empty
+
+}// end on_pb_saveImageDENCOL_clicked
+
+/**
+ * @brief MainWindow::on_pb_saveConfigDENCOL_clicked
+ */
+void MainWindow::on_pb_saveConfigDENCOL_clicked()
+{
+
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "denoisingColoredValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    //cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //--
+
+    float h_luminance    = 0.0;
+    float h_color       = 0.0;
+    int search_window   = 0;
+    int block_size      = 0;
+
+    h_luminance     = (float)ui->doubleSpinBox_hLuminanceDC->value();
+    h_color         = (float)ui->doubleSpinBox_PhotoR_DC->value();
+    search_window   = ui->spinBox_SearchW_DC->value();
+    block_size      = ui->spinBox_blocSize_DC->value();
+    //--
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "DenoisingColored";
+    fsave << "h_luminance" << h_luminance;
+    fsave << "h_color" << h_color;
+    fsave << "search_window" << search_window;
+    fsave << "block_size" << block_size;
+    fsave.release();
+
+} // end on_pb_saveConfigDENCOL_clicked
+
 //------------------------------------------------------------------------------
+
+
+
+
+
+
+
+
+
+
+
+
 
 
 

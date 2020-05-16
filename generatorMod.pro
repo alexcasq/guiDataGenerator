@@ -11,10 +11,12 @@ include(/home/visioniot/opencvConfig42.pri)
 
 SOURCES += \
     main.cpp \
-    mainwindow.cpp
+    mainwindow.cpp \
+    massivevision.cpp
 
 HEADERS += \
-    mainwindow.h
+    mainwindow.h \
+    massivevision.h
 
 FORMS += \
     mainwindow.ui
