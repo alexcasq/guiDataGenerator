@@ -100,11 +100,11 @@ void MainWindow::saveImage(Mat imgSave, QString iden)
         }
 
 
-        //cout<<"Filename save : " << filenameS.toStdString() << endl;
+        ////cout<<"Filename save : " << filenameS.toStdString() << endl;
 
         QFileInfo info(filenameS);
 
-        //cout<< info.completeSuffix().toStdString() << endl;
+        ////cout<< info.completeSuffix().toStdString() << endl;
 
         QString extension = info.completeSuffix();
         if(extension.isEmpty())
@@ -157,10 +157,128 @@ void MainWindow::toggleStatusbarLoad()
 {
     //pending development
 
-    // load in dependence to identiicator
+    // load in dependence to identificator
+    ymlConfig = QFileDialog::getOpenFileName(this,
+        tr("Open config yml "), ".", tr("yml Files (*.yml)"));
+
+    string identificator;
+
+    if(!ymlConfig.isEmpty())
+    {
+
+        FileStorage fileConfig(ymlConfig.toStdString(), FileStorage::READ);
+        fileConfig["identificator"] >> identificator;
+        if(identificator.empty())
+        {
+            int ret = QMessageBox::critical(this, tr("My Application"),
+                                           tr("erro in config file yml .\n"
+                                              "The fields in yml file not are corrects."),
+                                           QMessageBox::Ok);
+
+        } // indetificator is incorrect
+
+        if(identificator == "blur")
+        {
+            Size kernelB;
+            fileConfig["kernelB"] >> kernelB;
+            int s1, s2;
+            s1 = kernelB.width;
+            s2 = kernelB.height;
+
+            ui->spinBox_Bk1->setValue(s1);
+            ui->spinBox_Bk2->setValue(s2);
 
 
-}
+        } // identificator blur
+
+        if(identificator == "GaussianBlur")
+        {
+            Size kernelG;
+            double sigmaX;
+            double sigmaY;
+
+            fileConfig["kernelG"]   >> kernelG;
+            fileConfig["sigmaX"]    >> sigmaX;
+            fileConfig["sigmaY"]    >> sigmaY;
+
+            int s1 = kernelG.width;
+            int s2 = kernelG.height;
+            ui->spinBox_k1->setValue(s1);
+            ui->spinBox_k2->setValue(s2);
+
+            ui->spinBox_sigx->setValue(sigmaX);
+            ui->spinBox_sigy->setValue(sigmaY);
+
+
+        } // identificator GaussianBlur
+
+
+        if(identificator == "medianBlur")
+        {
+            int ksize;
+
+            fileConfig["ksize"]   >> ksize;
+            ui->spinBox_ksizeMB->setValue(ksize);
+
+        } // identificator medianBlur
+
+
+        if(identificator == "bilateralFilter")
+        {
+            int dBF;
+            double sigmaColorBF;
+            double sigmaSpaceBF;
+
+            fileConfig["dBF"]   >> dBF;
+            fileConfig["sigmaColorBF"]   >> sigmaColorBF;
+            fileConfig["sigmaSpaceBF"]   >> sigmaSpaceBF;
+
+            ui->spinBox_BFd->setValue(dBF);
+            ui->doubleSpinBox_BFsigmaColor->setValue(sigmaColorBF);
+            ui->doubleSpinBox_BFsigmaSpace->setValue(sigmaSpaceBF);
+
+
+        } // identificator bilateralFilter
+
+        if(identificator == "convolution")
+        {
+            //Mat kernel;
+            // PENDING DEVELOPMENT
+
+            fileConfig["kernel"]   >> kernel;
+
+
+        } // identificator convolution
+
+
+        if(identificator == "DenoisingColored")
+        {
+            float h_luminance;
+            float h_color;
+            int search_window;
+            int block_size;
+
+            fileConfig["h_luminance"]   >> h_luminance;
+            fileConfig["h_color"]       >> h_color;
+            fileConfig["search_window"] >> search_window;
+            fileConfig["block_size"]    >> block_size;
+
+
+            ui->doubleSpinBox_hLuminanceDC->setValue(h_luminance);
+            ui->doubleSpinBox_PhotoR_DC->setValue(h_color);
+            ui->spinBox_SearchW_DC->setValue(search_window);
+            ui->spinBox_blocSize_DC->setValue(block_size);
+
+
+        } // identificator DenoisingColored
+
+
+        fileConfig.release();
+
+
+    } //ymlConfig not empty
+
+} // end toggleStatusbarLoad load files config values
 
 
 /**
@@ -348,7 +466,7 @@ void MainWindow::on_pb_saveConfigGB_clicked()
 
     QFileInfo info(fileYml);
 
-    //cout<< info.completeSuffix().toStdString() << endl;
+    ////cout<< info.completeSuffix().toStdString() << endl;
 
     QString extension = info.completeSuffix();
     if(extension.isEmpty() || extension != "yml")
@@ -450,7 +568,7 @@ void MainWindow::on_pb_saveConfigBLUR_clicked()
 
     QFileInfo info(fileYml);
 
-    //cout<< info.completeSuffix().toStdString() << endl;
+    ////cout<< info.completeSuffix().toStdString() << endl;
 
     QString extension = info.completeSuffix();
     if(extension.isEmpty() || extension != "yml")
@@ -538,7 +656,7 @@ void MainWindow::on_pb_saveConfigMEDIANBLUR_clicked()
 
     QFileInfo info(fileYml);
 
-    //cout<< info.completeSuffix().toStdString() << endl;
+    ////cout<< info.completeSuffix().toStdString() << endl;
 
     QString extension = info.completeSuffix();
     if(extension.isEmpty() || extension != "yml")
@@ -651,7 +769,7 @@ void MainWindow::on_pb_saveConfigBILF_clicked()
 
     QFileInfo info(fileYml);
 
-    //cout<< info.completeSuffix().toStdString() << endl;
+    ////cout<< info.completeSuffix().toStdString() << endl;
 
     QString extension = info.completeSuffix();
     if(extension.isEmpty() || extension != "yml")
@@ -960,7 +1078,7 @@ void MainWindow::on_pb_saveConfigConv_clicked()
 
     QFileInfo info(fileYml);
 
-    //cout<< info.completeSuffix().toStdString() << endl;
+    ////cout<< info.completeSuffix().toStdString() << endl;
 
     QString extension = info.completeSuffix();
     if(extension.isEmpty() || extension != "yml")
@@ -1215,11 +1333,11 @@ void MainWindow::on_pb_addMassive_clicked()
  */
 void MainWindow::on_listView_addScript_doubleClicked(const QModelIndex &index)
 {
-    //cout<<index.row()<<endl;
+    ////cout<<index.row()<<endl;
 
     QString itemText = index.data(Qt::DisplayRole).toString();
 
-    //cout<<itemText.toStdString()<<endl;
+    ////cout<<itemText.toStdString()<<endl;
 
     functionList.removeAt(index.row());
 
@@ -1239,23 +1357,30 @@ void MainWindow::on_pb_addFromFile_clicked()
     ymlConfig = QFileDialog::getOpenFileName(this,
         tr("Open config yml "), ".", tr("yml Files (*.yml)"));
 
-    FileStorage fileConfig(ymlConfig.toStdString(), FileStorage::READ);
-    string indetificator = fileConfig["identificator"];
-    if(indetificator.empty())
+    if(!ymlConfig.isEmpty())
     {
-        int ret = QMessageBox::critical(this, tr("My Application"),
-                                       tr("erro in config file yml .\n"
-                                          "The fields in yml file not are corrects."),
-                                       QMessageBox::Ok);
 
-    } // indetificator is incorrect
+        FileStorage fileConfig(ymlConfig.toStdString(), FileStorage::READ);
+        string indetificator = fileConfig["identificator"];
+        if(indetificator.empty())
+        {
+            int ret = QMessageBox::critical(this, tr("My Application"),
+                                           tr("erro in config file yml .\n"
+                                              "The fields in yml file not are corrects."),
+                                           QMessageBox::Ok);
 
-    fileConfig.release();
+        } // indetificator is incorrect
 
-    functionList.append(ymlConfig);
+        fileConfig.release();
 
-    on_pb_addMassive_clicked();
+        functionList.append(ymlConfig);
 
+        model->setStringList(functionList);
+        ui->listView_addScript->setModel(model);
+
+        //on_pb_addMassive_clicked();
+
+    } // ymlConfig exist
 
 } // endl
 
@@ -1267,7 +1392,7 @@ void MainWindow::on_pb_MassiveExe_clicked()
 {
     int numerFunc;
     numerFunc = functionList.size();
-    cout<<"numerFunc:: "<< numerFunc << endl;
+    //cout<<"numerFunc:: "<< numerFunc << endl;
 
     QString dirImages = QFileDialog::getExistingDirectory(this, tr("Open Directory with images"),
                                                 ".",
@@ -1282,22 +1407,48 @@ void MainWindow::on_pb_MassiveExe_clicked()
 
 
 
-    cout<<"dirImages:  " << dirImages.toStdString() << endl;
-    cout<<"OUTdIR   :  " << outProcess.toStdString() << endl;
+    //cout<<"dirImages:  " << dirImages.toStdString() << endl;
+    //cout<<"OUTdIR   :  " << outProcess.toStdString() << endl;
 
 
-    //--------------------------------------------------
+    //-------------------------------------------------------------------------
     // class massiveVission process
-    //--------------------------------------------------
+    //-------------------------------------------------------------------------
     massiveVision msv(outProcess, functionList);
-    msv.executeMassive(dirImages);
-    //--------------------------------------------------
-
-    // para unitario
-    //              msv.unitarioExec(img)
+    msv.executeMassive(dirImages, *ui->progressBar_DA, *ui->lcdNumber_imagesP);
+    //-------------------------------------------------------------------------
 
 
 } // end on_pb_MassiveExe_clicked
+
+
+/**
+ * @brief MainWindow::on_pb_oneFileExec_clicked
+ */
+void MainWindow::on_pb_oneFileExec_clicked()
+{
+    on_pb_loadImage_clicked();
+
+    if(!imgInput.empty() && !fileName.isEmpty())
+    {
+        QString outProcess = QFileDialog::getExistingDirectory(this, tr("Select Out Directory "),
+                                                    ".",
+                                                    QFileDialog::ShowDirsOnly
+                                                    | QFileDialog::DontResolveSymlinks);
+
+        //---------------------------------------------------------
+        // class massiveVission process unit image
+        //---------------------------------------------------------
+        massiveVision msv(outProcess, functionList);
+        msv.unitarioExec(imgInput, fileName, *ui->progressBar_DA);
+        //---------------------------------------------------------
+
+    } // imgInput not empty
+
+} // end on_pb_oneFileExec_clicked
+
+
+
 //------------------------------------------------------------------------------
 
 
@@ -1424,7 +1575,7 @@ void MainWindow::on_pb_saveConfigDENCOL_clicked()
 
     QFileInfo info(fileYml);
 
-    //cout<< info.completeSuffix().toStdString() << endl;
+    ////cout<< info.completeSuffix().toStdString() << endl;
 
     QString extension = info.completeSuffix();
     if(extension.isEmpty() || extension != "yml")

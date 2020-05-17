@@ -141,9 +141,9 @@ public:
     QString ymlConfig;
 
 
-
-
 private slots:
+
+
     void on_pb_loadImage_clicked();
 
     void toggleStatusbarLoad();
@@ -277,6 +277,8 @@ private slots:
     void on_pb_addFromFile_clicked();
 
     void on_pb_MassiveExe_clicked();
+
+    void on_pb_oneFileExec_clicked();
 
 private:
     Ui::MainWindow *ui;

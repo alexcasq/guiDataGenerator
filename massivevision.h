@@ -7,7 +7,10 @@
 #include<QFile>
 #include<QFileInfoList>
 #include<QFileInfo>
-
+#include<QDate>
+#include<QDateTime>
+#include<QProgressBar>
+#include<QLCDNumber>
 
 #include <stdlib.h>
 #include <stdio.h>
@@ -30,20 +33,33 @@ public:
      * @brief executeMassive
      * @param pathIMages
      */
-    void executeMassive(QString pathIMages);
+    void executeMassive(QString pathIMages, QProgressBar &pbar,
+                        QLCDNumber &imgNum);
 
 
     /**
      * @brief unitarioExec
      * @param img
      */
-    void unitarioExec(Mat img);
+    void unitarioExec(Mat img, QString filename, QProgressBar &pbar);
 
 
     QString pathOut;
 
 
     QStringList listActions;
+
+    struct imgIdent {
+       Mat imgS;
+       QString indent;
+    };
+
+
+private:
+
+
+
+    imgIdent processVision(QString functionYML, Mat imgInput);
 
 
 };

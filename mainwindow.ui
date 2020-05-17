@@ -6,8 +6,8 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>363</width>
-    <height>665</height>
+    <width>362</width>
+    <height>710</height>
    </rect>
   </property>
   <property name="font">
@@ -47,9 +47,9 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>150</y>
+      <y>180</y>
       <width>321</width>
-      <height>471</height>
+      <height>481</height>
      </rect>
     </property>
     <property name="font">
@@ -64,14 +64,14 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="currentIndex">
-     <number>7</number>
+     <number>0</number>
     </property>
     <widget class="QWidget" name="Gaussian">
      <widget class="QSpinBox" name="spinBox_k1">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>90</y>
         <width>61</width>
         <height>26</height>
        </rect>
@@ -86,8 +86,8 @@
      <widget class="QSpinBox" name="spinBox_k2">
       <property name="geometry">
        <rect>
-        <x>80</x>
-        <y>60</y>
+        <x>70</x>
+        <y>90</y>
         <width>61</width>
         <height>26</height>
        </rect>
@@ -102,10 +102,10 @@
      <widget class="QLabel" name="label_kernelG">
       <property name="geometry">
        <rect>
-        <x>10</x>
-        <y>40</y>
-        <width>111</width>
-        <height>17</height>
+        <x>30</x>
+        <y>70</y>
+        <width>101</width>
+        <height>20</height>
        </rect>
       </property>
       <property name="text">
@@ -118,7 +118,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -132,7 +132,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>130</y>
+        <y>150</y>
         <width>61</width>
         <height>26</height>
        </rect>
@@ -158,7 +158,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>130</y>
         <width>67</width>
         <height>17</height>
        </rect>
@@ -183,13 +183,39 @@
        <string>Sigma Y</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="pb_saveConfigGB">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>350</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Config Values</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveImageGB">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>310</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="Blur">
      <widget class="QLabel" name="label_kernelB">
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>40</y>
+        <y>60</y>
         <width>111</width>
         <height>17</height>
        </rect>
@@ -202,7 +228,7 @@
       <property name="geometry">
        <rect>
         <x>80</x>
-        <y>60</y>
+        <y>80</y>
         <width>61</width>
         <height>26</height>
        </rect>
@@ -220,7 +246,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -234,7 +260,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>80</y>
         <width>61</width>
         <height>26</height>
        </rect>
@@ -246,6 +272,32 @@
        <number>255</number>
       </property>
      </widget>
+     <widget class="QPushButton" name="pb_saveConfigBLUR">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Config Values</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveImageBLUR">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="MedianBlur">
      <widget class="QLabel" name="label_medianBlur">
@@ -254,7 +306,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -268,7 +320,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>80</y>
         <width>61</width>
         <height>26</height>
        </rect>
@@ -284,7 +336,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>40</y>
+        <y>60</y>
         <width>67</width>
         <height>17</height>
        </rect>
@@ -296,6 +348,32 @@
        <string notr="true">kSIZE</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="pb_saveImageMEDIANBLUR">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>150</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveConfigMEDIANBLUR">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>190</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Config Values</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="BilateralFilter">
      <widget class="QLabel" name="label_bilFilter">
@@ -304,7 +382,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -318,7 +396,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>100</y>
         <width>71</width>
         <height>26</height>
        </rect>
@@ -334,7 +412,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>160</y>
         <width>101</width>
         <height>26</height>
        </rect>
@@ -350,7 +428,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>180</y>
+        <y>220</y>
         <width>101</width>
         <height>26</height>
        </rect>
@@ -366,7 +444,7 @@
       <property name="geometry">
        <rect>
         <x>16</x>
-        <y>40</y>
+        <y>80</y>
         <width>71</width>
         <height>20</height>
        </rect>
@@ -379,7 +457,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>100</y>
+        <y>140</y>
         <width>111</width>
         <height>17</height>
        </rect>
@@ -392,13 +470,39 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>160</y>
+        <y>200</y>
         <width>121</width>
         <height>17</height>
        </rect>
       </property>
       <property name="text">
        <string>Sigma Space</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveImageBILF">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveConfigBILF">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>300</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Config Values</string>
       </property>
      </widget>
     </widget>
@@ -409,7 +513,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -872,7 +976,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -929,7 +1033,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="palette">
@@ -1007,7 +1111,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>40</y>
+        <y>60</y>
         <width>241</width>
         <height>41</height>
        </rect>
@@ -1025,7 +1129,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>120</y>
+        <y>140</y>
         <width>291</width>
         <height>221</height>
        </rect>
@@ -1046,7 +1150,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>90</y>
+        <y>110</y>
         <width>141</width>
         <height>31</height>
        </rect>
@@ -1067,7 +1171,7 @@
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>90</y>
+        <y>110</y>
         <width>151</width>
         <height>31</height>
        </rect>
@@ -1088,7 +1192,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>340</y>
+        <y>360</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -1109,7 +1213,7 @@
       <property name="geometry">
        <rect>
         <x>160</x>
-        <y>340</y>
+        <y>360</y>
         <width>141</width>
         <height>41</height>
        </rect>
@@ -1122,13 +1226,41 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>400</y>
+        <y>420</y>
         <width>291</width>
         <height>23</height>
        </rect>
       </property>
       <property name="value">
        <number>1</number>
+      </property>
+     </widget>
+     <widget class="QLCDNumber" name="lcdNumber_imagesP">
+      <property name="geometry">
+       <rect>
+        <x>240</x>
+        <y>450</y>
+        <width>61</width>
+        <height>31</height>
+       </rect>
+      </property>
+     </widget>
+     <widget class="QLabel" name="label_imgProce">
+      <property name="geometry">
+       <rect>
+        <x>80</x>
+        <y>460</y>
+        <width>151</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="text">
+       <string>Processed images</string>
       </property>
      </widget>
     </widget>
@@ -1139,7 +1271,7 @@
         <x>0</x>
         <y>0</y>
         <width>171</width>
-        <height>17</height>
+        <height>31</height>
        </rect>
       </property>
       <property name="frameShape">
@@ -1334,6 +1466,32 @@
        <string>TemplateW Size</string>
       </property>
      </widget>
+     <widget class="QPushButton" name="pb_saveConfigDENCOL">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>260</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Config Values</string>
+      </property>
+     </widget>
+     <widget class="QPushButton" name="pb_saveImageDENCOL">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>220</y>
+        <width>181</width>
+        <height>41</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Save Image</string>
+      </property>
+     </widget>
     </widget>
     <widget class="QWidget" name="page_5"/>
     <widget class="QWidget" name="page_6"/>
@@ -1355,7 +1513,7 @@
     <property name="geometry">
      <rect>
       <x>20</x>
-      <y>110</y>
+      <y>120</y>
       <width>191</width>
       <height>31</height>
      </rect>
@@ -1367,8 +1525,8 @@
    <widget class="QLabel" name="label_selectFunction">
     <property name="geometry">
      <rect>
-      <x>40</x>
-      <y>90</y>
+      <x>20</x>
+      <y>100</y>
       <width>151</width>
       <height>17</height>
      </rect>
@@ -1384,7 +1542,7 @@
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>363</width>
+     <width>362</width>
      <height>20</height>
     </rect>
    </property>
@@ -1396,7 +1554,6 @@
     <addaction name="separator"/>
     <addaction name="separator"/>
     <addaction name="loadValues"/>
-    <addaction name="saveAllConfigs"/>
     <addaction name="actionExit"/>
    </widget>
    <widget class="QMenu" name="menuTools">
