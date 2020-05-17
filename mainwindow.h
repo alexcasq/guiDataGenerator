@@ -5,7 +5,9 @@
 #include <QFile>
 #include <qfiledialog.h>
 #include <QInputDialog>
-
+#include <QStringListModel>
+#include <QAbstractItemView>
+#include <QMessageBox>
 
 
 #include <stdlib.h>
@@ -15,6 +17,9 @@
 #include <opencv2/imgproc.hpp>
 #include <opencv2/highgui.hpp>
 #include <opencv2/opencv.hpp>
+
+#include <massivevision.h>
+
 
 using namespace cv;
 using namespace std;
@@ -41,18 +46,43 @@ public:
      * @brief saveImage
      * @param imgSave
      */
-    void saveImage(Mat imgSave);
-
+    void saveImage(Mat imgSave, QString iden);
 
 
     QString fileName;
 
     // function in combobox
-    QString defGaussianBlur     = "Gaussian Blur";
-    QString defBlur             = "Blur";
-    QString defMedianBlur       = "Median Blur";
-    QString defBilateralFilter  = "Bilateral Filter";
-    QString defConvolution      = "Apply Convolution";
+    QString defGaussianBlur      = "Gaussian Blur";
+    QString defBlur              = "Blur";
+    QString defMedianBlur        = "Median Blur";
+    QString defBilateralFilter   = "Bilateral Filter";
+    QString defConvolution       = "Apply Convolution";
+    QString defColorConversion   = "Color Conversion";
+    QString defDataAumentation   = "Data Aumentation";
+    QString defDenoisingColored  = "Denoising Colored";
+
+
+    // Funtions in combobox color conversion
+    QString defBGR2GRAY     = "BGR -> GRAY";
+    QString defBGR2HSV      = "BGR -> HSV";
+    QString defBGR2Luv      = "BGR -> Luv";
+    QString defBGR2Lab      = "BGR -> Lab";
+    QString defBGR2HLS      = "BGR -> HLS";
+    QString defBGR2XYZ      = "BGR -> XYZ";
+    QString defBGR2YCrCB    = "BGR -> YCrCB";
+
+    // Funtions in combobox data aumentation
+    QString defFlipXaxis     = "Flipping around X axis";
+    QString defFlipYaxis     = "Flipping around Y axis";
+    QString defFlipXYaxes     = "Flipping around both axes";
+
+    Mat imgGray;
+    Mat imgHSV;
+    Mat imgLuv;
+    Mat imgLab;
+    Mat imgHLS;
+    Mat imgXYZ;
+    Mat imgYCrCB;
 
 
     // VAR TO GAUSSIAN BLUR
@@ -98,19 +128,29 @@ public:
     int p20, p21, p22, p23, p24;
     int p30, p31, p32, p33, p34;
     int p40, p41, p42, p43, p44;
+    Mat kernel;
     void RunFilter2D();
+    //
+    // VAR DENOISING COLORED
+    void denoisingColored();
+    Mat imgDenoisedColored;
+    //
 
-
-
-
+    QStringListModel *model;
+    QStringList functionList;
+    QString ymlConfig;
 
 
 private slots:
+
+
     void on_pb_loadImage_clicked();
 
     void toggleStatusbarLoad();
 
     void toggleStatusbarExit();
+
+    void ToolsCloseAllWindows();
 
 
     void on_pb_viewOriginalImage_clicked();
@@ -191,6 +231,54 @@ private slots:
 
 
     void on_pb_saveImageConv_clicked();
+
+    void on_comboBox_colorConv_currentIndexChanged(const QString &arg1);
+
+    void on_comboBox_DA_currentIndexChanged(const QString &arg1);
+
+    void on_doubleSpinBox_hLuminanceDC_valueChanged(double arg1);
+
+    void on_doubleSpinBox_PhotoR_DC_valueChanged(double arg1);
+
+    void on_spinBox_SearchW_DC_valueChanged(int arg1);
+
+    void on_spinBox_blocSize_DC_valueChanged(int arg1);
+
+    void on_pb_addMassive_clicked();
+
+    void on_listView_addScript_doubleClicked(const QModelIndex &index);
+
+
+
+    void on_pb_saveImageGB_clicked();
+
+    void on_pb_saveImageBLUR_clicked();
+
+    void on_pb_saveImageMEDIANBLUR_clicked();
+
+    void on_pb_saveImageBILF_clicked();
+
+    void on_pb_saveImageCC_clicked();
+
+    void on_pb_saveImageDENCOL_clicked();
+
+    void on_pb_saveConfigGB_clicked();
+
+    void on_pb_saveConfigBLUR_clicked();
+
+    void on_pb_saveConfigMEDIANBLUR_clicked();
+
+    void on_pb_saveConfigBILF_clicked();
+
+    void on_pb_saveConfigConv_clicked();
+
+    void on_pb_saveConfigDENCOL_clicked();
+
+    void on_pb_addFromFile_clicked();
+
+    void on_pb_MassiveExe_clicked();
+
+    void on_pb_oneFileExec_clicked();
 
 private:
     Ui::MainWindow *ui;
