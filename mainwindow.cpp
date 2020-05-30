@@ -20,6 +20,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_functions->addItem(defColorConversion);
     ui->comboBox_functions->addItem(defDataAumentation);
     ui->comboBox_functions->addItem(defDenoisingColored);
+    ui->comboBox_functions->addItem(defModifyChannels);
+    ui->comboBox_functions->addItem(defBasicThresholding);
     //------------------------------------------------------------
 
     ui->comboBox_colorConv->addItem("Press to select Convertion");
@@ -35,6 +37,30 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_DA->addItem(defFlipXaxis);
     ui->comboBox_DA->addItem(defFlipYaxis);
     ui->comboBox_DA->addItem(defFlipXYaxes);
+
+    ui->hsb_B->setStyleSheet("background-color: #69cbee;"
+                             "alternate-background-color: #09EA09;");
+
+    ui->hsb_G->setStyleSheet("background-color: #72edb5;"
+                             "alternate-background-color: #09EA09;");
+
+    ui->hsb_R->setStyleSheet("background-color: #f88989;"
+                             "alternate-background-color: #09EA09;");
+
+    ui->comboBox_MC_typeNorm->addItem(defNormType_NORM_INF);
+    ui->comboBox_MC_typeNorm->addItem(defNormType_NORM_L1);
+    ui->comboBox_MC_typeNorm->addItem(defNormType_NORM_L2);
+    ui->comboBox_MC_typeNorm->addItem(defNormType_NORM_MINMAX);
+
+    // Thresholding types
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_OTSU);
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_TRUNC);
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_BINARY);
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_TOZERO);
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_TRIANGLE);
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_BINARY_INV);
+    ui->comboBox_th_type->addItem(def_thbType_THRESH_TOZERO_INV);
+
 
     // Create model
     model = new QStringListModel(this);
@@ -98,7 +124,6 @@ void MainWindow::saveImage(Mat imgSave, QString iden)
             filenameS = QFileDialog::getSaveFileName(this, "Save file default jpg", iden,
                                                     suges);
         }
-
 
         ////cout<<"Filename save : " << filenameS.toStdString() << endl;
 
@@ -356,6 +381,17 @@ void MainWindow::on_comboBox_functions_currentIndexChanged(const QString &arg1)
         ui->stackedWidget_values->setCurrentIndex(7);
     }
 
+    if(arg1 == defModifyChannels)
+    {
+        ui->stackedWidget_values->setCurrentIndex(8);
+    }
+
+    if(arg1 == defBasicThresholding)
+    {
+        ui->stackedWidget_values->setCurrentIndex(9);
+    }
+
+
 } // end on_comboBox_functions_currentIndexChanged
 //------------------------------------------------------------------------------
 
@@ -589,8 +625,6 @@ void MainWindow::on_pb_saveConfigBLUR_clicked()
 } // end on_pb_saveConfigBLUR_clicked
 
 //------------------------------------------------------------------------------
-
-
 
 
 //------------------------------------------------------------------------------
@@ -1376,6 +1410,7 @@ void MainWindow::on_pb_addFromFile_clicked()
         functionList.append(ymlConfig);
 
         model->setStringList(functionList);
+
         ui->listView_addScript->setModel(model);
 
         //on_pb_addMassive_clicked();
@@ -1416,6 +1451,7 @@ void MainWindow::on_pb_MassiveExe_clicked()
     //-------------------------------------------------------------------------
     massiveVision msv(outProcess, functionList);
     msv.executeMassive(dirImages, *ui->progressBar_DA, *ui->lcdNumber_imagesP);
+    waitKey(1);
     //-------------------------------------------------------------------------
 
 
@@ -1611,10 +1647,393 @@ void MainWindow::on_pb_saveConfigDENCOL_clicked()
 
 
 
+//------------------------------------------------------------------------------
+// MODIFY VALUE COLOR
+//------------------------------------------------------------------------------
+/**
+ * @brief MainWindow::on_hsb_R_valueChanged
+ * @param value
+ */
+void MainWindow::on_hsb_R_valueChanged(int value)
+{
+    if(!imgInput.empty())
+    {
+        Mat rgbchannel[3];
+        // The actual splitting.
+        split(imgInput, rgbchannel);
+        //Mat red;
+        //red = rgbchannel[0];
+        Mat result;
+        Mat R = Mat::ones(imgInput.rows, imgInput.cols, CV_8UC1);
+        //result = (red/value);
+        result = R * value;
+        vector<Mat> channels; //BGR
+        channels.push_back(rgbchannel[0]);
+        channels.push_back(rgbchannel[1]);
+        channels.push_back(result);
+
+
+        /// Merge the three channels
+        Mat imgMergeR;
+        merge(channels, imgMergeR);
+
+        namedWindow("Change Channels R",0);
+        imshow("Change Channels R", imgMergeR);
+
+    } // imgInput not empty
+
+
+} // end on_hsb_R_valueChanged
+
+
+/**
+ * @brief MainWindow::on_hsb_G_valueChanged
+ * @param value
+ */
+void MainWindow::on_hsb_G_valueChanged(int value)
+{
+    if(!imgInput.empty())
+    {
+        Mat rgbchannel[3];
+        // The actual splitting.
+        split(imgInput, rgbchannel);
+        //Mat red;
+        //red = rgbchannel[0];
+        Mat result;
+        Mat G = Mat::ones(imgInput.rows, imgInput.cols, CV_8UC1);
+        //result = (red/value);
+        result = G * value;
+        vector<Mat> channels;  //BGR
+        channels.push_back(rgbchannel[0]);
+        channels.push_back(result);
+        channels.push_back(rgbchannel[2]);
+
+        /// Merge the three channels
+        Mat imgMergeG;
+        merge(channels, imgMergeG);
+
+        namedWindow("Change Channels G",0);
+        imshow("Change Channels G", imgMergeG);
+
+    } // imgInput not empty
+
+
+} // end on_hsb_G_valueChanged
+
+/**
+ * @brief MainWindow::on_hsb_B_valueChanged
+ * @param value
+ */
+void MainWindow::on_hsb_B_valueChanged(int value)
+{
+    if(!imgInput.empty())
+    {
+        Mat rgbchannel[3];
+        // The actual splitting.
+        split(imgInput, rgbchannel);
+        //Mat red;
+        //red = rgbchannel[0];
+        Mat result;
+        Mat B = Mat::ones(imgInput.rows, imgInput.cols, CV_8UC1);
+        //result = (red/value);
+        result = B * value;
+        vector<Mat> channels;  //BGR
+        channels.push_back(result);
+        channels.push_back(rgbchannel[1]);
+        channels.push_back(rgbchannel[2]);
+
+        Mat imgMergeB;
+        /// Merge the three channels
+        merge(channels, imgMergeB);
+
+        namedWindow("Change Channels B",0);
+        imshow("Change Channels B", imgMergeB);
+
+    } // imgInput not empty
+
+
+} // end on_hsb_B_valueChanged
+
+
+/**
+ * @brief MainWindow::on_pb_MC_merge_clicked
+ */
+void MainWindow::on_pb_MC_merge_clicked()
+{
+    if(!imgInput.empty())
+    {
+        int Bval, Rval, Gval;
+
+        Bval = ui->hsb_B->value();
+        Rval = ui->hsb_R->value();
+        Gval = ui->hsb_G->value();
+
+//        cout<<"------------------------------" << endl;
+//        cout<<"Bval:   " << Bval << endl;
+//        cout<<"Rval:   " << Rval << endl;
+//        cout<<"Gval:   " << Gval << endl;
+//        cout<<"------------------------------" << endl;
+
+        Mat rgbchannel[3];
+        split(imgInput, rgbchannel);
+
+        Mat resultB;
+        Mat B = Mat::ones(imgInput.rows, imgInput.cols, CV_8UC1);
+        resultB = rgbchannel[0] / Bval;
+
+        Mat resultG;
+        Mat G = Mat::ones(imgInput.rows, imgInput.cols, CV_8UC1);
+        resultG = rgbchannel[1] / Gval;
+
+        Mat resultR;
+        Mat R = Mat::ones(imgInput.rows, imgInput.cols, CV_8UC1);
+        resultR = rgbchannel[2] / Rval;
+
+        vector<Mat> channels;  //BGR
+        channels.push_back(resultB);
+        channels.push_back(resultG);
+        channels.push_back(resultR);
+
+        /// Merge the three channels
+        merge(channels, imgMerge);
+
+        namedWindow("Change Channels BGR",0);
+        imshow("Change Channels BGR", imgMerge);
+
+
+        QString typeNorm;
+        int _alfa, _beta;
+        _alfa = ui->doubleSpinBox_MD_alfa->value();
+        _beta = ui->doubleSpinBox_MC_beta->value();
+        typeNorm = ui->comboBox_MC_typeNorm->currentText();
+        cv::NormTypes TYPE;
+        if(typeNorm == defNormType_NORM_INF)
+        {
+            TYPE = cv::NORM_INF;
+        }
+        if(typeNorm == defNormType_NORM_L1)
+        {
+            TYPE = cv::NORM_L1;
+        }
+        if(typeNorm == defNormType_NORM_L2)
+        {
+            TYPE = cv::NORM_L2;
+        }
+
+        if(typeNorm == defNormType_NORM_MINMAX)
+        {
+            TYPE = cv::NORM_MINMAX;
+        }
+
+        Mat normalizeImMerge;
+        normalize(imgMerge, normalizeImMerge, _alfa, _beta, TYPE, -1, noArray());
+        namedWindow("normalizeImMerge",0);
+        imshow("normalizeImMerge", normalizeImMerge);
+
+        Mat normalizeIm;
+        normalize(imgInput, normalizeIm, _alfa, _beta, TYPE, -1, noArray());
+        namedWindow("normalizeIm",0);
+        imshow("normalizeIm", normalizeIm);
 
 
 
 
+    } // imgInput not empty
+
+} //  end on_pb_MC_merge_clicked
+
+
+/**
+ * @brief MainWindow::on_pb_saveConfigMC_clicked
+ */
+void MainWindow::on_pb_saveConfigMC_clicked()
+{
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "colorModifyValuesConfig",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    ////cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    QString typeNorm;
+    typeNorm.clear();
+    int _alfa, _beta;
+    _alfa = ui->doubleSpinBox_MD_alfa->value();
+    _beta = ui->doubleSpinBox_MC_beta->value();
+    typeNorm = ui->comboBox_MC_typeNorm->currentText();
+    //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "normalize";
+    fsave << "_alfa" << _alfa;
+    fsave << "_beta" << _beta;
+    fsave << "typeNorm" << typeNorm.toStdString();
+    fsave.release();
+
+} // end on_pb_saveConfigMC_clicked
+
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+// THRESHOLD BASIC
+//------------------------------------------------------------------------------
+//------------------------------------------------------------------------------
+/**
+ * @brief MainWindow::RunTH_b
+ */
+void MainWindow::RunTH_b()
+{
+    if(!imgInput.empty())
+    {
+
+        int thValue;
+        thValue = ui->spinBox_th_value->value();
+
+        QString QtypeTH;
+        QtypeTH.clear();
+        ThresholdTypes typeTH;
+        typeTH = THRESH_BINARY;
+        QtypeTH = ui->comboBox_th_type->currentText();
+
+        if(QtypeTH == "THRESH_BINARY")
+        {
+            typeTH = THRESH_BINARY;
+        }
+
+        if(QtypeTH == "THRESH_BINARY_INV")
+        {
+            typeTH = THRESH_BINARY_INV;
+        }
+
+        if(QtypeTH == "THRESH_TRUNC")
+        {
+            typeTH = THRESH_TRUNC;
+        }
+
+        if(QtypeTH == "THRESH_TOZERO")
+        {
+            typeTH = THRESH_TOZERO;
+        }
+
+        if(QtypeTH == "THRESH_TOZERO_INV")
+        {
+            typeTH = THRESH_TOZERO_INV;
+        }
+
+
+        if(QtypeTH == "THRESH_OTSU")
+        {
+            typeTH = THRESH_OTSU;
+        }
+
+        if(QtypeTH == "THRESH_TRIANGLE")
+        {
+            typeTH = THRESH_TRIANGLE;
+        }
+
+        Mat grayImg;
+        cvtColor(imgInput, grayImg, COLOR_BGR2GRAY);
+        threshold(grayImg, imgTHb, thValue, 255, typeTH);
+
+        namedWindow("thresHoldBasic", 0);
+        imshow("thresHoldBasic", imgTHb);
+
+    } // imgInput not empty
+
+
+} // end RunTH_b
+
+
+/**
+ * @brief MainWindow::on_comboBox_th_type_currentIndexChanged
+ * @param arg1
+ */
+void MainWindow::on_comboBox_th_type_currentIndexChanged(const QString &arg1)
+{
+    RunTH_b();
+
+} // on_comboBox_th_type_currentIndexChanged
+
+/**
+ * @brief MainWindow::on_spinBox_th_value_valueChanged
+ * @param arg1
+ */
+void MainWindow::on_spinBox_th_value_valueChanged(int arg1)
+{
+    RunTH_b();
+
+} // end on_spinBox_th_value_valueChanged
+
+
+/**
+ * @brief MainWindow::on_pb_saveImage_thb_clicked
+ */
+void MainWindow::on_pb_saveImage_thb_clicked()
+{
+    if(!imgTHb.empty())
+    {
+        saveImage(imgTHb, "thresHoldBasic");
+
+    } // imgDenoisedColored not empty
+
+}
+
+
+/**
+ * @brief MainWindow::on_pb_saveConfig_th_b_clicked
+ */
+void MainWindow::on_pb_saveConfig_th_b_clicked()
+{
+    QString fileYml;
+    fileYml = QFileDialog::getSaveFileName(this,
+                                           "Save file default yml",
+                                           "basic_thresholding",
+                                           "config (*.yml)");
+    string nameYML;
+    nameYML= fileYml.toStdString();
+
+    QFileInfo info(fileYml);
+
+    ////cout<< info.completeSuffix().toStdString() << endl;
+
+    QString extension = info.completeSuffix();
+    if(extension.isEmpty() || extension != "yml")
+    {
+         nameYML = fileYml.toStdString() + ".yml";
+    }
+
+    //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+    int thValue;
+    thValue = ui->spinBox_th_value->value();
+    QString QtypeTH;
+    QtypeTH.clear();
+    ThresholdTypes typeTH;
+    typeTH = THRESH_BINARY;
+    QtypeTH = ui->comboBox_th_type->currentText();
+
+
+    //-- -- -- -- -- -- -- -- -- -- -- -- -- -- -- -- --
+
+    FileStorage fsave(nameYML, FileStorage::WRITE);
+    fsave << "identificator" << "threshold";
+    fsave << "thValue" << thValue;
+    fsave << "typeTH" << QtypeTH.toStdString();
+    fsave.release();
+
+} // on_pb_saveConfig_th_b_clicked
+//------------------------------------------------------------------------------
 
 
 
