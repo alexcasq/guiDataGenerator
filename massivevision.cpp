@@ -141,6 +141,41 @@ massiveVision::imgIdent massiveVision::processVision(QString functionYML, Mat im
 
         } // identificator DenoisingColored
 
+        if(identificator == "normalize")
+        {
+            string type;
+            int _alfa, _beta;
+            fsRead["_alfa"]     >> _alfa;
+            fsRead["_beta"]     >> _beta;
+            fsRead["typeNorm"]  >> type;
+
+            cv::NormTypes TYPE;
+            if(type == "NORM_INF")
+            {
+                TYPE = cv::NORM_INF;
+            }
+            if(type == "NORM_L1")
+            {
+                TYPE = cv::NORM_L1;
+            }
+            if(type == "NORM_L2")
+            {
+                TYPE = cv::NORM_L2;
+            }
+
+            if(type == "NORM_MINMAX")
+            {
+                TYPE = cv::NORM_MINMAX;
+            }
+
+            normalize(imgInput, outProcess, _alfa, _beta,
+                      TYPE, -1, noArray());
+
+            outProcess.copyTo(out.imgS);
+
+            out.indent = "normalize";
+
+        } // normalize
 
         fsRead.release();
 
@@ -151,6 +186,12 @@ massiveVision::imgIdent massiveVision::processVision(QString functionYML, Mat im
 } // end processVision
 
 
+/**
+ * @brief massiveVision::executeMassive
+ * @param pathIMages
+ * @param pbar
+ * @param imgNum
+ */
 void massiveVision::executeMassive(QString pathIMages, QProgressBar &pbar,
                                    QLCDNumber &imgNum)
 {
@@ -165,6 +206,11 @@ void massiveVision::executeMassive(QString pathIMages, QProgressBar &pbar,
         //cout<<"Numer the files to process : " << listFiles.size() << endl;
 
         //cout<<"Numer of actiosn : " << listActions.size() << endl;
+        Mat imageStatus(80, 250, CV_8UC3, Scalar(0, 0, 0));
+        string prStatus;
+        prStatus = "Status_process";
+        putText(imageStatus, prStatus, Point2f(10,17), FONT_HERSHEY_PLAIN, 0.77,  Scalar(0,0,255,255));
+        namedWindow("Status_process",1);
 
         int contActions;
         QString action;
@@ -190,15 +236,29 @@ void massiveVision::executeMassive(QString pathIMages, QProgressBar &pbar,
         } // pathOut not exist created
 
 
-
+        int actionNum;
+        actionNum = 0;
         for(contActions = 0; contActions < listActions.size(); ++contActions)
         {
+            actionNum = actionNum + 1;
             action.clear();
             action = listActions[contActions];
             //cout<<"-------------------------------------" << endl;
             //cout<<"Actions -------- :  " << action.toStdString() << endl;
 
             pbar.setValue(contActions);
+
+            prStatus = "Run_actions";
+            putText(imageStatus, prStatus, Point2f(10,29),
+                    FONT_HERSHEY_PLAIN, 0.75,  Scalar(0,0,255,255));
+            imshow("Status_process", imageStatus);
+            char key = waitKey(1);
+            if(key == 'q' || key == 'Q')
+            {
+                destroyAllWindows();
+                break;
+            }
+
 
             foreach (const QFileInfo &fileinfo, listFiles)
             {
@@ -251,10 +311,23 @@ void massiveVision::executeMassive(QString pathIMages, QProgressBar &pbar,
 
                         if(!outPV.imgS.empty())
                         {
-
-                            nameOut = folderOut + "/" + outPV.indent + "_" + rootName;
+                            QString valAction = QString::number(actionNum);
+                            nameOut = folderOut + "/" + valAction + "_"
+                                    + outPV.indent + "_" + rootName;
                             //cout<<"Name out:  " << nameOut.toStdString() << endl;
                             imwrite(nameOut.toStdString(), outPV.imgS);
+
+                            prStatus = "Process image";
+                            putText(imageStatus, prStatus, Point2f(10,41),
+                                    FONT_HERSHEY_PLAIN, 0.75,  Scalar(0,0,255,255));
+                            imshow("Status_process", imageStatus);
+                            char key = waitKey(1);
+                            if(key == 'q' || key == 'Q')
+                            {
+                                destroyAllWindows();
+                                break;
+                            }
+
                         } // imgYML not empty
 
                     } // ymnl process
@@ -271,12 +344,18 @@ void massiveVision::executeMassive(QString pathIMages, QProgressBar &pbar,
 
     } // pathIMages not empty
 
+    destroyAllWindows();
 
 
 } // end executeMassive
 
 
-
+/**
+ * @brief massiveVision::unitarioExec
+ * @param imgInput
+ * @param filename
+ * @param pbar
+ */
 void massiveVision::unitarioExec(Mat imgInput, QString filename, QProgressBar &pbar)
 {
     int contActions;
@@ -299,6 +378,12 @@ void massiveVision::unitarioExec(Mat imgInput, QString filename, QProgressBar &p
 
     pbar.setRange(0, listActions.size());
 
+    Mat imageStatus(80, 250, CV_8UC3, Scalar(0, 0, 0));
+    string prStatus;
+    prStatus = "Status_process";
+    putText(imageStatus, prStatus, Point2f(10,17), FONT_HERSHEY_PLAIN, 0.77,  Scalar(0,0,255,255));
+    namedWindow("Status_process",1);
+
     for(contActions = 0; contActions < listActions.size(); ++contActions)
     {
         action.clear();
@@ -313,6 +398,16 @@ void massiveVision::unitarioExec(Mat imgInput, QString filename, QProgressBar &p
 
             QString rootName = info1.completeBaseName() + "." +
                     info1.completeSuffix();
+
+            prStatus = "Process unit image";
+            putText(imageStatus, prStatus, Point2f(10,41), FONT_HERSHEY_PLAIN, 0.75,  Scalar(0,0,255,255));
+            imshow("Status_process", imageStatus);
+            char key = waitKey(1);
+            if(key == 'q' || key == 'Q')
+            {
+                destroyAllWindows();
+                break;
+            }
 
             if(action == "Flipping around X axis")
             {
@@ -355,6 +450,7 @@ void massiveVision::unitarioExec(Mat imgInput, QString filename, QProgressBar &p
                     //cout<<"Name out:  " << nameOut.toStdString() << endl;
 
                     imwrite(nameOut.toStdString(), outPV.imgS);
+
                 } // imgYML not empty
 
             } // ymnl process
@@ -363,6 +459,8 @@ void massiveVision::unitarioExec(Mat imgInput, QString filename, QProgressBar &p
         } // imgInput not empty
 
     } // for contActions
+
+    destroyAllWindows();
 
     pbar.setValue(contActions);
 

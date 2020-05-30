@@ -60,6 +60,8 @@ public:
     QString defColorConversion   = "Color Conversion";
     QString defDataAumentation   = "Data Aumentation";
     QString defDenoisingColored  = "Denoising Colored";
+    QString defModifyChannels    = "Modify Channels";
+    QString defBasicThresholding = "Basic Thresholding";
 
 
     // Funtions in combobox color conversion
@@ -135,6 +137,24 @@ public:
     void denoisingColored();
     Mat imgDenoisedColored;
     //
+    // VAR MODIFY CHANNELS
+    Mat imgMerge;
+    QString defNormType_NORM_INF        = "NORM_INF";
+    QString defNormType_NORM_L1         = "NORM_L1";
+    QString defNormType_NORM_L2         = "NORM_L2";
+    QString defNormType_NORM_MINMAX     = "NORM_MINMAX";
+    //
+    // VAR TH BASICS
+    Mat imgTHb;
+    QString def_thbType_THRESH_BINARY       = "THRESH_BINARY";
+    QString def_thbType_THRESH_BINARY_INV   = "THRESH_BINARY_INV";
+    QString def_thbType_THRESH_TRUNC        = "THRESH_TRUNC";
+    QString def_thbType_THRESH_TOZERO       = "THRESH_TOZERO";
+    QString def_thbType_THRESH_TOZERO_INV   = "THRESH_TOZERO_INV";
+    QString def_thbType_THRESH_OTSU         = "THRESH_OTSU";
+    QString def_thbType_THRESH_TRIANGLE     = "THRESH_TRIANGLE";
+    void RunTH_b();
+
 
     QStringListModel *model;
     QStringList functionList;
@@ -279,6 +299,24 @@ private slots:
     void on_pb_MassiveExe_clicked();
 
     void on_pb_oneFileExec_clicked();
+
+    void on_hsb_R_valueChanged(int value);
+
+    void on_hsb_G_valueChanged(int value);
+
+    void on_hsb_B_valueChanged(int value);
+
+    void on_pb_MC_merge_clicked();
+
+    void on_pb_saveConfigMC_clicked();
+
+    void on_comboBox_th_type_currentIndexChanged(const QString &arg1);
+
+    void on_spinBox_th_value_valueChanged(int arg1);
+
+    void on_pb_saveImage_thb_clicked();
+
+    void on_pb_saveConfig_th_b_clicked();
 
 private:
     Ui::MainWindow *ui;
