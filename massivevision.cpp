@@ -177,6 +177,65 @@ massiveVision::imgIdent massiveVision::processVision(QString functionYML, Mat im
 
         } // normalize
 
+        if(identificator == "threshold")
+        {
+            string type;
+            int thValue;
+            fsRead["thValue"]   >> thValue;
+            fsRead["typeTH"]    >> type;
+
+            cv::ThresholdTypes typeTH;
+
+            if(type == "THRESH_OTSU")
+            {
+                typeTH = cv::THRESH_OTSU;
+            }
+
+            if(type == "THRESH_BINARY")
+            {
+                typeTH = cv::THRESH_BINARY;
+            }
+
+            if(type == "THRESH_BINARY_INV")
+            {
+                typeTH = cv::THRESH_BINARY_INV;
+            }
+
+            if(type == "THRESH_TRUNC")
+            {
+                typeTH = cv::THRESH_TRUNC;
+            }
+
+            if(type == "THRESH_TOZERO")
+            {
+                typeTH = cv::THRESH_TOZERO;
+            }
+
+            if(type == "THRESH_TOZERO_INV")
+            {
+                typeTH = cv::THRESH_TOZERO_INV;
+            }
+
+            if(type == "THRESH_OTSU")
+            {
+                typeTH = cv::THRESH_OTSU;
+            }
+
+            if(type == "THRESH_TRIANGLE")
+            {
+                typeTH = cv::THRESH_TRIANGLE;
+            }
+
+            Mat grayImg;
+            cvtColor(imgInput, grayImg, COLOR_BGR2GRAY);
+            threshold(grayImg, outProcess, thValue, 255, typeTH);
+
+            outProcess.copyTo(out.imgS);
+
+            out.indent = "threshold";
+
+        } // threshold
+
         fsRead.release();
 
     } // file exist
@@ -316,6 +375,16 @@ void massiveVision::executeMassive(QString pathIMages, QProgressBar &pbar,
                                     + outPV.indent + "_" + rootName;
                             //cout<<"Name out:  " << nameOut.toStdString() << endl;
                             imwrite(nameOut.toStdString(), outPV.imgS);
+
+                            if(flagDuplicate == true)
+                            {
+                                QString rename;
+                                rename = pathIMages + "/" + valAction + "_"
+                                                + outPV.indent + "_" + rootName;
+                                imwrite(rename.toStdString(), imgInput);
+
+                            }// flag duplicate true
+
 
                             prStatus = "Process image";
                             putText(imageStatus, prStatus, Point2f(10,41),

@@ -62,7 +62,7 @@ public:
     QString defDenoisingColored  = "Denoising Colored";
     QString defModifyChannels    = "Modify Channels";
     QString defBasicThresholding = "Basic Thresholding";
-
+    QString defUtils             = "Utils";
 
     // Funtions in combobox color conversion
     QString defBGR2GRAY     = "BGR -> GRAY";
@@ -317,6 +317,8 @@ private slots:
     void on_pb_saveImage_thb_clicked();
 
     void on_pb_saveConfig_th_b_clicked();
+
+    void on_pb_renameImages_clicked();
 
 private:
     Ui::MainWindow *ui;

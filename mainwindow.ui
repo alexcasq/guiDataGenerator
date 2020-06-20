@@ -76,7 +76,7 @@
      <enum>QFrame::Box</enum>
     </property>
     <property name="currentIndex">
-     <number>9</number>
+     <number>6</number>
     </property>
     <widget class="QWidget" name="Gaussian">
      <widget class="QSpinBox" name="spinBox_k1">
@@ -752,10 +752,10 @@
         </rect>
        </property>
        <property name="minimum">
-        <number>-255</number>
+        <number>-480</number>
        </property>
        <property name="maximum">
-        <number>255</number>
+        <number>480</number>
        </property>
        <property name="value">
         <number>1</number>
@@ -1123,7 +1123,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>60</y>
+        <y>40</y>
         <width>241</width>
         <height>41</height>
        </rect>
@@ -1141,7 +1141,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>140</y>
+        <y>120</y>
         <width>291</width>
         <height>221</height>
        </rect>
@@ -1162,7 +1162,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>110</y>
+        <y>90</y>
         <width>141</width>
         <height>31</height>
        </rect>
@@ -1183,7 +1183,7 @@
       <property name="geometry">
        <rect>
         <x>150</x>
-        <y>110</y>
+        <y>90</y>
         <width>151</width>
         <height>31</height>
        </rect>
@@ -1204,7 +1204,7 @@
       <property name="geometry">
        <rect>
         <x>10</x>
-        <y>360</y>
+        <y>340</y>
         <width>151</width>
         <height>41</height>
        </rect>
@@ -1225,7 +1225,7 @@
       <property name="geometry">
        <rect>
         <x>160</x>
-        <y>360</y>
+        <y>340</y>
         <width>141</width>
         <height>41</height>
        </rect>
@@ -1250,7 +1250,7 @@
      <widget class="QLCDNumber" name="lcdNumber_imagesP">
       <property name="geometry">
        <rect>
-        <x>240</x>
+        <x>250</x>
         <y>450</y>
         <width>61</width>
         <height>31</height>
@@ -1260,7 +1260,7 @@
      <widget class="QLabel" name="label_imgProce">
       <property name="geometry">
        <rect>
-        <x>80</x>
+        <x>90</x>
         <y>460</y>
         <width>151</width>
         <height>17</height>
@@ -1273,6 +1273,19 @@
       </property>
       <property name="text">
        <string>Processed images</string>
+      </property>
+     </widget>
+     <widget class="QCheckBox" name="checkBox_duplicateSaveImage">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>390</y>
+        <width>181</width>
+        <height>17</height>
+       </rect>
+      </property>
+      <property name="text">
+       <string>Duplicate Save Image</string>
       </property>
      </widget>
     </widget>
@@ -2192,6 +2205,140 @@
       <property name="text">
        <string>Save Config Values</string>
       </property>
+     </widget>
+    </widget>
+    <widget class="QWidget" name="page_7">
+     <widget class="QLabel" name="label_utils">
+      <property name="geometry">
+       <rect>
+        <x>0</x>
+        <y>0</y>
+        <width>171</width>
+        <height>31</height>
+       </rect>
+      </property>
+      <property name="font">
+       <font>
+        <family>Consolas</family>
+        <pointsize>11</pointsize>
+       </font>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="text">
+       <string>Utils Rename Images</string>
+      </property>
+     </widget>
+     <widget class="QFrame" name="frame_renameImages">
+      <property name="geometry">
+       <rect>
+        <x>10</x>
+        <y>90</y>
+        <width>291</width>
+        <height>101</height>
+       </rect>
+      </property>
+      <property name="frameShape">
+       <enum>QFrame::Box</enum>
+      </property>
+      <property name="frameShadow">
+       <enum>QFrame::Raised</enum>
+      </property>
+      <widget class="QPushButton" name="pb_renameImages">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>60</y>
+         <width>271</width>
+         <height>31</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Run Rename Images</string>
+       </property>
+      </widget>
+      <widget class="QComboBox" name="comboBox_formatImage">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>30</y>
+         <width>91</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="currentIndex">
+        <number>-1</number>
+       </property>
+      </widget>
+      <widget class="QSpinBox" name="spinBox_fieldWidht">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>30</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="minimum">
+        <number>1</number>
+       </property>
+       <property name="maximum">
+        <number>10</number>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_fieldWidht">
+       <property name="geometry">
+        <rect>
+         <x>100</x>
+         <y>10</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>fieldWidht</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_extension">
+       <property name="geometry">
+        <rect>
+         <x>190</x>
+         <y>10</y>
+         <width>91</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Extension</string>
+       </property>
+      </widget>
+      <widget class="QLineEdit" name="lineEdit_rootname">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>30</y>
+         <width>81</width>
+         <height>22</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>image_</string>
+       </property>
+      </widget>
+      <widget class="QLabel" name="label_rootName">
+       <property name="geometry">
+        <rect>
+         <x>10</x>
+         <y>10</y>
+         <width>81</width>
+         <height>16</height>
+        </rect>
+       </property>
+       <property name="text">
+        <string>Root name</string>
+       </property>
+      </widget>
      </widget>
     </widget>
    </widget>
