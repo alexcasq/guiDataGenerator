@@ -22,6 +22,7 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_functions->addItem(defDenoisingColored);
     ui->comboBox_functions->addItem(defModifyChannels);
     ui->comboBox_functions->addItem(defBasicThresholding);
+    ui->comboBox_functions->addItem(defUtils);
     //------------------------------------------------------------
 
     ui->comboBox_colorConv->addItem("Press to select Convertion");
@@ -60,6 +61,12 @@ MainWindow::MainWindow(QWidget *parent)
     ui->comboBox_th_type->addItem(def_thbType_THRESH_TRIANGLE);
     ui->comboBox_th_type->addItem(def_thbType_THRESH_BINARY_INV);
     ui->comboBox_th_type->addItem(def_thbType_THRESH_TOZERO_INV);
+
+    //Utils rename images
+    ui->comboBox_formatImage->addItem(".jpg");
+    ui->comboBox_formatImage->addItem(".jpeg");
+    ui->comboBox_formatImage->addItem(".png");
+    ui->comboBox_formatImage->addItem(".bmp");
 
 
     // Create model
@@ -391,6 +398,10 @@ void MainWindow::on_comboBox_functions_currentIndexChanged(const QString &arg1)
         ui->stackedWidget_values->setCurrentIndex(9);
     }
 
+    if(arg1 == defUtils)
+    {
+        ui->stackedWidget_values->setCurrentIndex(10);
+    }
 
 } // end on_comboBox_functions_currentIndexChanged
 //------------------------------------------------------------------------------
@@ -1429,6 +1440,9 @@ void MainWindow::on_pb_MassiveExe_clicked()
     numerFunc = functionList.size();
     //cout<<"numerFunc:: "<< numerFunc << endl;
 
+    bool flagDuplicate;
+    flagDuplicate = ui->checkBox_duplicateSaveImage->isChecked();
+
     QString dirImages = QFileDialog::getExistingDirectory(this, tr("Open Directory with images"),
                                                 ".",
                                                 QFileDialog::ShowDirsOnly
@@ -1442,6 +1456,7 @@ void MainWindow::on_pb_MassiveExe_clicked()
 
 
 
+
     //cout<<"dirImages:  " << dirImages.toStdString() << endl;
     //cout<<"OUTdIR   :  " << outProcess.toStdString() << endl;
 
@@ -1450,6 +1465,7 @@ void MainWindow::on_pb_MassiveExe_clicked()
     // class massiveVission process
     //-------------------------------------------------------------------------
     massiveVision msv(outProcess, functionList);
+    msv.flagDuplicate = flagDuplicate;
     msv.executeMassive(dirImages, *ui->progressBar_DA, *ui->lcdNumber_imagesP);
     waitKey(1);
     //-------------------------------------------------------------------------
@@ -2038,11 +2054,108 @@ void MainWindow::on_pb_saveConfig_th_b_clicked()
 
 
 
+//------------------------------------------------------------------------------
+// UTILS RENAME IMAGES
+//------------------------------------------------------------------------------
+
+//------------------------------------------------------------------------------
+/**
+ * @brief MainWindow::on_pb_renameImages_clicked
+ */
+void MainWindow::on_pb_renameImages_clicked()
+{
+
+    int fieldWidht;
+    fieldWidht = ui->spinBox_fieldWidht->value();
+
+    QString extension;
+    extension = ui->comboBox_formatImage->currentText();
+
+    QString rootName;
+    rootName = ui->lineEdit_rootname->text();
+
+    QString dirImages = QFileDialog::getExistingDirectory(this, tr("Open Directory with images"),
+                                                ".",
+                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+
+
+    QString outProcess = QFileDialog::getExistingDirectory(this, tr("Select Out Directory "),
+                                                ".",
+                                                QFileDialog::ShowDirsOnly
+                                                | QFileDialog::DontResolveSymlinks);
+
+    QFileInfoList listFiles;
+    QDir dir(dirImages);
+    QStringList filters;
+    filters << "*.png" << "*.jpg" << "*.bmp" <<"*.jpeg";
+    listFiles = dir.entryInfoList(filters, QDir::Files|QDir::NoDotAndDotDot);
+
+
+    //cout<<"Numer of actiosn : " << listActions.size() << endl;
+    Mat imageStatus(80, 250, CV_8UC3, Scalar(0, 0, 0));
+    string prStatus;
+    prStatus = "Status_process";
+    putText(imageStatus, prStatus, Point2f(10,17), FONT_HERSHEY_PLAIN, 0.77,
+            Scalar(0,0,255,255));
+    namedWindow("Status_process",1);
+
+    QString format = "dd_MM_yyyy_hh_mm_ss_zz";
+    QDateTime date = QDateTime::currentDateTime();
+    QString dateString = date.toString(format);
+    //cout<<dateString.toStdString()<<endl;
+    QString folderOut;
+    folderOut.clear();
+    folderOut = outProcess + "/" + dateString;
+    if(!QDir(folderOut).exists())
+    {
+        QDir().mkdir(folderOut);
+
+    } // pathOut not exist created
+
+    Mat imageRead;
+    QString nameImageOut;
+    int number;
+    number = 0;
+    foreach (const QFileInfo &fileinfo, listFiles)
+    {
+        imshow("Status_process", imageStatus);
+        waitKey(1);
+        QString imageFile = fileinfo.absoluteFilePath();
+        //cout<<"imageFile:  " << imageFile.toStdString() << endl;
+
+        imageRead = imread(imageFile.toStdString());
+
+        if(imageRead.empty())
+        {
+            int ret = QMessageBox::critical(this, tr("Rename Images"),
+                                           tr("erro to read image"),
+                                           QMessageBox::Ok);
+
+        }
+        else
+        {
+            number = number + 1;
+            QString QSnumber = QString("%1").arg(number, fieldWidht, 10, QChar('0'));
+            nameImageOut.clear();
+            nameImageOut = folderOut + "/" + rootName + QSnumber + extension;
+
+            cout<<"Name Image to save : " << nameImageOut.toStdString() << endl;
+
+            imwrite(nameImageOut.toStdString(), imageRead);
+
+        } // image read not empty
+
+    } // foreach
+
+    destroyAllWindows();
+
+} // end on_pb_renameImages_clicked
+//------------------------------------------------------------------------------
 
 
 
-
-
+//------------------------------------------------------------------------------
 
 
 

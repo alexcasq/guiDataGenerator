@@ -46,6 +46,7 @@ public:
 
     QString pathOut;
 
+    bool flagDuplicate;
 
     QStringList listActions;
 
